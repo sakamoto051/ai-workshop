@@ -201,6 +201,32 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 - `description`: **極めて重要**。LLMはこの説明文を読んで、ツールを使うべきか判断する。
 - `properties.description`: 引数の説明。LLMに「どのような形式で値を渡すべきか」を指示する（例では「英語名」と具体的に指定している）。
 
+---
+
+### 詳細: 処理の実装 (CallToolRequestSchema)
+
+エージェントがツールを呼び出した際の具体的な処理（APIリクエストやデータ整形）を記述する。
+
+```javascript
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.params.name === "get_pokemon_info") {
+    // 1. エージェントから渡された引数を受け取る
+    const { pokemon_name } = request.params.arguments;
+    
+    // 2. 外部APIを叩いて情報を取得する
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon_name}`);
+    const data = await res.json();
+    
+    // 3. テキストに整形してエージェントに返す
+    const text = `名前: ${data.name}\n身長: ${data.height / 10}m\n体重: ${data.weight / 10}kg`;
+    return { content: [{ type: "text", text }] };
+  }
+});
+```
+
+- **引数の受け取り**: `request.params.arguments` にLLMが生成した引数が入っている。
+- **戻り値**: `content` 配列の中に `{ type: "text", text: "..." }` の形式で文字列を返す。このテキストがLLMのコンテキストとして読み込まれる。
+
 
 ---
 
