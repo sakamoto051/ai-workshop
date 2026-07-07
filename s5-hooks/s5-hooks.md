@@ -47,11 +47,15 @@ footer: 'S5: Hooks + 安全運用'
 
 ---
 
-## Hooks とは
+## Hooks とは (1/2)
 
 > エージェントのライフサイクル イベントに対して、**任意のコマンド** を実行させる仕組み
 
 代表的なイベント:
+
+---
+
+## Hooks とは (2/2)
 
 | イベント | タイミング |
 |---|---|
@@ -80,9 +84,9 @@ footer: 'S5: Hooks + 安全運用'
 
 <!-- ignore-layout -->
 
-## Claude Code の Hooks 設定例
+## Claude Code の Hooks 設定例 (1/2)
 
-`.claude/settings.json`:
+`.claude/settings.json` (PreToolUse):
 
 ```json
 {
@@ -91,7 +95,22 @@ footer: 'S5: Hooks + 安全運用'
       { "matcher": "Bash",
         "hooks": [{ "type": "command",
                     "command": ".claude/hooks/block-dangerous.sh" }] }
-    ],
+    ]
+  }
+}
+```
+
+---
+
+<!-- ignore-layout -->
+
+## Claude Code の Hooks 設定例 (2/2)
+
+`.claude/settings.json` (PostToolUse):
+
+```json
+{
+  "hooks": {
     "PostToolUse": [
       { "matcher": "Edit|Write",
         "hooks": [{ "type": "command",
@@ -105,9 +124,9 @@ footer: 'S5: Hooks + 安全運用'
 
 <!-- ignore-layout -->
 
-## Antigravity CLI の Hooks
+## Antigravity CLI の Hooks (1/2)
 
-`.agents/hooks.json`:
+`.agents/hooks.json` (block-dangerous):
 
 ```json
 {
@@ -117,7 +136,20 @@ footer: 'S5: Hooks + 安全運用'
         "hooks": [{ "type": "command",
                     "command": ".agents/hooks/block-dangerous.sh" }] }
     ]
-  },
+  }
+}
+```
+
+---
+
+<!-- ignore-layout -->
+
+## Antigravity CLI の Hooks (2/2)
+
+`.agents/hooks.json` (format-files):
+
+```json
+{
   "format-files": {
     "PostToolUse": [
       { "matcher": "write_file|replace",
@@ -182,7 +214,7 @@ cat .agent-log/audit.jsonl | jq .
 
 ---
 
-## 主流トピック: Plan モード
+## 主流トピック: Plan モード (1/2)
 
 > **「いきなり書かせず、まず計画を立てさせる」**
 
@@ -191,6 +223,10 @@ cat .agent-log/audit.jsonl | jq .
 - **Claude Code**: `/plan` で計画モード突入。承認後に実装
 - **Codex CLI**: `--ask-for-approval` 系オプション
 - **Antigravity CLI**: 計画的応答を促すプロンプティング + 拡張で対応
+
+---
+
+## 主流トピック: Plan モード (2/2)
 
 **フロー**:
 

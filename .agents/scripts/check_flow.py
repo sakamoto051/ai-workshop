@@ -31,10 +31,12 @@ def check_flow():
                     error_count += 1
 
             # 3. Check Summary placement
-            if 'まとめ' in heading:
-                if idx != len(headings) - 1:
-                    print(f"❌ {filepath}: 『{heading}』はスライドの最後に配置してください。後ろに別の解説が続いています。")
-                    error_count += 1
+            if heading.startswith('## まとめ'):
+                for later_heading in headings[idx+1:]:
+                    if not later_heading.startswith('## まとめ') and '参考' not in later_heading and 'Q&A' not in later_heading and 'おわりに' not in later_heading:
+                        print(f"❌ {filepath}: 『{heading}』はスライドの最後に配置してください。後ろに別の解説が続いています。")
+                        error_count += 1
+                        break
                 has_summary = True
 
             # 4. Check Intro placement

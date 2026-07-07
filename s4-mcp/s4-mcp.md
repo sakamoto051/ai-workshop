@@ -83,6 +83,7 @@ MCP ツールが返すデータ（DBのレコードや長大なAPIレスポン�
 - サーバー側で「検索」「絞り込み」「ページネーション」を実装する。
 - エージェントに対するプロンプトで「少しずつ取得して」「必要な部分だけ要約して」と指示を出す。
 
+---
 
 ## 主要な MCP エコシステム一覧
 
@@ -150,7 +151,7 @@ const server = new Server(
 
 ---
 
-### 詳細: ツールの定義 (ListToolsRequestSchema)
+### 詳細: ツールの定義 (1/2)
 
 「このツールが何をするか」「どんな引数が必要か」をエージェントに定義する。
 
@@ -164,12 +165,19 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   }]
 }));
 ```
+
+---
+
+### 詳細: ツールの定義 (2/2)
+
+先ほど定義したスキーマの各項目の役割は以下の通り。
+
 - **`description`**: 最重要。LLMがツールを選ぶ判断基準となる。
 - **`properties`**: 引数の型と説明。LLMが値を推論する助けになる。
 
 ---
 
-### 詳細: 処理の実装 (CallToolRequestSchema)
+### 詳細: 処理の実装 (1/2)
 
 ```javascript
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -182,6 +190,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 });
 ```
+
+---
+
+### 詳細: 処理の実装 (2/2)
+
+先ほど実装した各処理の役割は以下の通り。
+
 - **分岐と引数**: `request.params.name` で分岐し、`arguments` から値を取得する。
 - **戻り値**: `content` 配列に文字列を入れて返す。これがLLMのコンテキストになる。
 

@@ -46,12 +46,10 @@ footer: 'S2: コンテキスト管理 + プロンプト設計 + 基本操作'
 
 ---
 
-## コンテキストウィンドウの中身と構造
+## コンテキストウィンドウの中身と構造 (1/3)
 
 <style scoped>
 .cw-cap { text-align: center; font-size: 16px; font-weight: bold; color: #555; margin-bottom: 4px; white-space: nowrap; }
-table { font-size: 19px; margin-bottom: 20px; border-collapse: collapse; }
-td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
 .main-container { display: flex; gap: 50px; align-items: center; justify-content: center; margin-top: 20px; }
 .cw-box { width: 320px; border: 3px solid #333; border-radius: 6px; display: flex; flex-direction: column; overflow: hidden; }
 .band { padding: 12px 15px; font-size: 16px; color: #fff; }
@@ -60,7 +58,6 @@ td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
 .b-proj { background: #4285f4; flex: 0 0 auto; }
 .b-tool { background: #e53935; flex: 2 1 auto; }
 .b-free { background: repeating-linear-gradient(45deg, #f8f9fa, #f8f9fa 10px, #e8eaed 10px, #e8eaed 20px); color: #777; flex: 1 1 auto; display: flex; align-items: center; justify-content: center; border-top: 2px dashed #999; }
-.tag { display:inline-block; width:15px; height:15px; border-radius:3px; margin-right:8px; vertical-align:middle; }
 </style>
 
 <div class="main-container">
@@ -78,8 +75,16 @@ td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
   </div>
 </div>
 
-<!-- 右側: 表（凡例兼用） -->
-<div>
+</div>
+
+---
+
+## コンテキストウィンドウの中身と構造 (2/3)
+
+<style scoped>
+table { font-size: 19px; margin-bottom: 20px; border-collapse: collapse; }
+td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
+</style>
 
 <table>
   <thead>
@@ -88,18 +93,31 @@ td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
   <tbody>
     <tr><td><span style="color:#9aa0a6">■</span> <b>システムプロンプト</b></td><td>エージェントの指示・ツール</td><td>固定</td></tr>
     <tr><td><span style="color:#fb8c00">■</span> <b>会話履歴</b></td><td>過去の指示と応答</td><td>増える</td></tr>
+  </tbody>
+</table>
+
+---
+
+## コンテキストウィンドウの中身と構造 (3/3)
+
+<style scoped>
+table { font-size: 19px; margin-bottom: 20px; border-collapse: collapse; }
+td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
+</style>
+
+<table>
+  <thead>
+    <tr><th>中身</th><th>具体例</th><th>性質</th></tr>
+  </thead>
+  <tbody>
     <tr><td><span style="color:#4285f4">■</span> <b>プロジェクト指示</b></td><td><code>AGENTS.md</code>等</td><td>簡潔に書く</td></tr>
     <tr><td><span style="color:#e53935">■</span> <b>ツール実行結果</b></td><td>読込ファイル・出力等</td><td>一番膨らむ</td></tr>
   </tbody>
 </table>
 
-</div>
-
-</div>
-
 ---
 
-## コンテキストウィンドウのサイズ比較
+## コンテキストウィンドウのサイズ比較 (1/2)
 <style scoped> table { font-size: 0.85em; } </style>
 
 | エージェント | ベースモデル | コンテキストウィンドウ |
@@ -109,6 +127,14 @@ td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
 | **Codex** (OpenAI) | GPT-5.5 | **1M** |
 | | GPT-5.4 | **1M** |
 | | GPT-5.4 Mini | **400K** |
+
+---
+
+## コンテキストウィンドウのサイズ比較 (2/2)
+<style scoped> table { font-size: 0.85em; } </style>
+
+| エージェント | ベースモデル | コンテキストウィンドウ |
+|---|---|---|
 | **Claude Code** (Anthropic) | Opus 4.8 | **1M** |
 | | Sonnet 4.6 | **1M** |
 | | Haiku 4.5 | **200K** |
@@ -139,7 +165,7 @@ td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
 
 ---
 
-## 対策②: `AGENTS.md` によるルールの設定
+## 対策②: `AGENTS.md` によるルールの設定 (1/2)
 
 > プロジェクトのルールをファイルに集約する
 
@@ -148,21 +174,49 @@ td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
 - **例の提示**: 出力形式やコードの具体例
 - **構造化**: Markdown見出しや区切り文字でルールを整理して記述する
 
+---
+
+## 対策②: `AGENTS.md` によるルールの設定 (2/2)
+
+> プロジェクトのルールをファイルに集約する
+
 **配置**: 
 - プロジェクト固有: `.agents/AGENTS.md`
 - 共通: `~/.gemini/config/AGENTS.md`
 
 ---
 
-## `AGENTS.md` 記述例
+## `AGENTS.md` 記述例 (1/3)
 
 ```markdown
-# 1. 前提知識とルール（コンテキストと明確な指示）
-- 本システムは Next.js と Tailwind CSS を使用する。
-- UIコンポーネントは `src/components` 配下に作成する。
-- パッケージ追加時は `npm` ではなく必ず `pnpm` を使用する。
-- ...
+# My Project Rule
 
+## 1. 開発環境とコマンド
+- サーバー起動: `npm run dev`
+- テスト: `npm run test`
+
+## 2. コーディング規約
+- キャメルケースを使用すること。
+- UIコンポーネントは `components/` に配置すること。
+```
+
+---
+
+## `AGENTS.md` 記述例 (2/3)
+
+先述の通り、プロンプトのフォーマットや禁止事項などもここに記載する。
+
+```markdown
+## 3. AI への指示・振る舞い
+- 修正を提案する際は、必ず Before/After の形式で記述すること。
+- パスワード等のハードコードは絶対に禁止。
+```
+
+---
+
+## `AGENTS.md` 記述例 (3/3)
+
+```markdown
 # 2. 命名規則とフォーマット（例の提示と構造化）
 - クラス名: `PascalCase` (例: `UserController`)
 - JSON を出力する際は、以下の区切り文字に従う。

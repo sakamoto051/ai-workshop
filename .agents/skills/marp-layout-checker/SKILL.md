@@ -13,13 +13,9 @@ Marp スライドを編集した後は、静的解析（`npm run lint:layout`）
 
 ### 手順
 
-1. **Marp サーバーが起動していることを確認**
-   - `http://localhost:8080/s1-intro.md` にアクセスして一覧を確認
-
-2. **Playwright MCP でスクリーンショット撮影**
-   - `playwright_navigate` で対象 URL を開く（例: `http://localhost:8080/s1-intro.html`）
-   - `playwright_screenshot` でページ全体をキャプチャ
-   - スライドは Marp の矢印ナビゲーションで進める、または URL に `?p=N`（N=スライド番号）を付ける
+1. 編集後、`npm run test:slides`（または `npm run preslides:html` 及び `npm run lint:visual`）を実行する。
+2. もしエラー（はみ出しや行数オーバー）が検出された場合、ユーザーから指示を待つことなく**AI自身が自律的に対象ファイルを修正（スライドの分割、またはテキストの圧縮）**し、再度Linterを実行すること。
+3. エラーが0件（Pass）になるまでこの修復プロセスを自己完結でループし、完全にレイアウト崩れが解消された状態になってからユーザーに完了報告をすること。
 
 3. **確認ポイント**
    - テーブルがスライド右端からはみ出していないか

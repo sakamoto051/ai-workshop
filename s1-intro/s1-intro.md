@@ -298,19 +298,26 @@ td, th { padding: 8px 12px; }
 
 ---
 
-## 参考
+## 参考 (1/2)
 
 - Antigravity CLI: https://antigravity.google
 - Codex CLI: https://github.com/openai/codex
 - Claude Code: https://docs.claude.com/claude-code
 - MCP: https://modelcontextprotocol.io
 
+---
 
-### AI Agent 定義の一次出典
+## 参考 (2/3): AI Agent 定義の一次出典 (前半)
 
 - **OpenAI** — *A Practical Guide to Building Agents* (2025-04): https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf
 - **OpenAI** — Agents SDK ドキュメント: https://platform.openai.com/docs/guides/agents
 - **Anthropic** — *Building Effective Agents* (2024-12): https://www.anthropic.com/research/building-effective-agents
+
+---
+
+## 参考 (3/3): AI Agent 定義の一次出典 (後半)
+
 - **Anthropic** — NIST RFI on Agentic Security (2025): https://www.anthropic.com/policy/rfi-on-ai-agents
 - **Google Cloud** — *What are AI agents?*: https://cloud.google.com/discover/what-are-ai-agents
 - **Google DeepMind** — AI Control Roadmap (2026): https://deepmind.google/discover/blog/
+
