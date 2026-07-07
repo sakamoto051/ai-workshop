@@ -153,23 +153,13 @@ APIキー不要のパブリックAPI（PokéAPI）をラップしたサーバー
 
 ### ステップ 2: コード構造の理解 (5 分)
 
-```javascript
-// 1. ツールの定義をエージェントに伝える
-server.setRequestHandler(ListToolsRequestSchema, async () => {
-  return { tools: [{ name: "get_pokemon_info", /* 引数の型定義 */ }] };
-});
-
-// 2. ツールが呼ばれたときの処理を実装する
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  if (request.params.name === "get_pokemon_info") {
-    // 外部API（PokéAPI）を叩いて文字列で結果を返す
-    return { content: [{ type: "text", text: "結果" }] };
-  }
-});
-```
+`index.js` は約40行の小さなファイルだ。
+MCPサーバーの実装は非常にシンプルで、主に **「2つのハンドラー（機能）」** を登録するだけで完成する。
 
 - **`ListToolsRequestSchema`**: エージェントが「どんなツールが使えるか？」を把握するための型定義（JSON Schema）。
 - **`CallToolRequestSchema`**: 実際にツールが呼ばれた際の具体的な処理（APIリクエストとデータ抽出）。
+
+次のページから、それぞれの詳細を見ていく。
 
 ---
 
