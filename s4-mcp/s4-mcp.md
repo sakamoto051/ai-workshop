@@ -153,9 +153,6 @@ APIキー不要のパブリックAPI（PokéAPI）をラップしたサーバー
 
 ### ステップ 2: コード構造の理解 (5 分)
 
-`index.js` の主要な構成要素（約40行）を確認する。
-MCPサーバーの実装は非常にシンプルで、主に2つのハンドラーを登録するだけだ。
-
 ```javascript
 // 1. ツールの定義をエージェントに伝える
 server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -224,6 +221,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 ```
 
+- **ツールの分岐**: `request.params.name` にツール名（`get_pokemon_info`）が入る。複数のツールがある場合はここで `if` や `switch` を使って処理を分岐させる。
 - **引数の受け取り**: `request.params.arguments` にLLMが生成した引数が入っている。
 - **戻り値**: `content` 配列の中に `{ type: "text", text: "..." }` の形式で文字列を返す。このテキストがLLMのコンテキストとして読み込まれる。
 

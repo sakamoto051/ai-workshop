@@ -184,8 +184,6 @@ APIキー不要のパブリックAPI（PokéAPI）をラップしたサーバー
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="13" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="18">
 <header>AI エージェント入門ワークショップ</header>
 <h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97-2-%E3%82%B3%E3%83%BC%E3%83%89%E6%A7%8B%E9%80%A0%E3%81%AE%E7%90%86%E8%A7%A3-5-%E5%88%86">ステップ 2: コード構造の理解 (5 分)</h3>
-<p><code>index.js</code> の主要な構成要素（約40行）を確認する。<br />
-MCPサーバーの実装は非常にシンプルで、主に2つのハンドラーを登録するだけだ。</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-javascript"><span class="hljs-comment">// 1. ツールの定義をエージェントに伝える</span>
 server.<span class="hljs-title function_">setRequestHandler</span>(<span class="hljs-title class_">ListToolsRequestSchema</span>, <span class="hljs-title function_">async</span> () =&gt; {
   <span class="hljs-keyword">return</span> { <span class="hljs-attr">tools</span>: [{ <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;get_pokemon_info&quot;</span>, <span class="hljs-comment">/* 引数の型定義 */</span> }] };
@@ -251,6 +249,7 @@ server.<span class="hljs-title function_">setRequestHandler</span>(<span class="
 });
 </code></pre>
 <ul>
+<li><strong>ツールの分岐</strong>: <code>request.params.name</code> にツール名（<code>get_pokemon_info</code>）が入る。複数のツールがある場合はここで <code>if</code> や <code>switch</code> を使って処理を分岐させる。</li>
 <li><strong>引数の受け取り</strong>: <code>request.params.arguments</code> にLLMが生成した引数が入っている。</li>
 <li><strong>戻り値</strong>: <code>content</code> 配列の中に <code>{ type: &quot;text&quot;, text: &quot;...&quot; }</code> の形式で文字列を返す。このテキストがLLMのコンテキストとして読み込まれる。</li>
 </ul>
