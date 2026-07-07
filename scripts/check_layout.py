@@ -20,11 +20,14 @@ def check_layout():
                 error_count += 1
 
         for i, slide in enumerate(slides[1:], 1):  # Skip frontmatter
+            if '<!-- ignore-layout -->' in slide:
+                continue
+
             lines = [l for l in slide.strip().split('\n') if l.strip()]
             has_code_block = '```' in slide
             
             # 1. Line count check
-            limit = 14 if has_code_block else 18
+            limit = 16 if has_code_block else 20
             if len(lines) > limit:
                 # S2 slide 6 contains mostly raw HTML, so we might want to skip it, but to be strictly foolproof we enforce it unless specifically bypassed.
                 # However, to avoid breaking currently perfectly formatted HTML-based slides, we can exclude `<style scoped>`

@@ -160,25 +160,34 @@ APIキー不要のパブリックAPI（PokéAPI）をラップしたサーバー
 
 ---
 
+### 詳細: サーバーの初期化
+
+サーバーの本体を生成し、機能を宣言する。
+
+```javascript
+const server = new Server(
+  { name: "pokemon-server", version: "1.0.0" },
+  { capabilities: { tools: {} } }
+);
+```
+- **第一引数**: サーバー名とバージョン。識別子として使われる。
+- **第二引数**: 有効化する機能（Capabilities）の宣言。今回は `tools`（ツール提供機能）のみを有効にしている。
+
+---
+
 ### 詳細: ツールの定義 (ListToolsRequestSchema)
 
 エージェントに対して「このツールが何をするか」「どんな引数が必要か」を **JSON Schema** 形式で正確に伝える。
 
 ```javascript
 server.setRequestHandler(ListToolsRequestSchema, async () => {
-  return {
-    tools: [{
-      name: "get_pokemon_info",
-      description: "ポケモンの基本情報を取得します。", // LLMがツールを選ぶ判断基準
-      inputSchema: { // 必要な引数の定義
-        type: "object",
-        properties: {
-          pokemon_name: { type: "string", description: "英語名（例: pikachu）" },
-        },
-        required: ["pokemon_name"],
-      },
-    }],
-  };
+  return { tools: [{
+    name: "get_pokemon_info",
+    description: "ポケモンの基本情報を取得します。",
+    inputSchema: { type: "object", properties: {
+      pokemon_name: { type: "string", description: "英語名（例: pikachu）" }
+    }, required: ["pokemon_name"] }
+  }] };
 });
 ```
 
@@ -194,15 +203,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 ```javascript
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (request.params.name === "get_pokemon_info") {
-    // 1. エージェントから渡された引数を受け取る
     const { pokemon_name } = request.params.arguments;
-    
-    // 2. 外部APIを叩いて情報を取得する
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon_name}`);
     const data = await res.json();
-    
-    // 3. テキストに整形してエージェントに返す
-    const text = `名前: ${data.name}\n身長: ${data.height / 10}m\n体重: ${data.weight / 10}kg`;
+    const text = `名前: ${data.name}\n身長: ${data.height/10}m\n体重: ${data.weight/10}kg`;
     return { content: [{ type: "text", text }] };
   }
 });

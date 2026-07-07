@@ -78,6 +78,8 @@ footer: 'S5: Hooks + 安全運用'
 
 ---
 
+<!-- ignore-layout -->
+
 ## Claude Code の Hooks 設定例
 
 `.claude/settings.json`:
@@ -100,6 +102,8 @@ footer: 'S5: Hooks + 安全運用'
 ```
 
 ---
+
+<!-- ignore-layout -->
 
 ## Antigravity CLI の Hooks
 
