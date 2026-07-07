@@ -146,22 +146,33 @@ APIキー不要のパブリックAPI（PokéAPI）をラップしたサーバー
 
 用意されたリポジトリを利用し、エージェントへの統合を体験する。
 
-```bash
-cd hands-on/pokemon-mcp-server
-npm install
-```
-
 1. AIエージェント（agy等）にMCP設定を追加し、サーバーを登録する。
-2. エージェントに「リザードンのタイプと体重を教えて」と質問し、API経由で情報を取得して回答することを確認する。
+2. エージェントに「ピカチュウのタイプと体重を教えて」と質問し、API経由で情報を取得して回答することを確認する。
 
 ---
 
 ### ステップ 2: コード構造の理解 (5 分)
 
 `index.js` の主要な構成要素（約40行）を確認する。
+MCPサーバーの実装は非常にシンプルで、主に2つのハンドラーを登録するだけだ。
 
-- **ツールの定義**: `ListToolsRequestSchema` で `get_pokemon_info` ツールと引数の型（JSON Schema）を定義する。
-- **処理の実装**: `CallToolRequestSchema` 内で外部API（PokéAPI）を叩き、取得したJSONから必要な文字列を抽出して返す。
+```javascript
+// 1. ツールの定義をエージェントに伝える
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+  return { tools: [{ name: "get_pokemon_info", /* 引数の型定義 */ }] };
+});
+
+// 2. ツールが呼ばれたときの処理を実装する
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.params.name === "get_pokemon_info") {
+    // 外部API（PokéAPI）を叩いて文字列で結果を返す
+    return { content: [{ type: "text", text: "結果" }] };
+  }
+});
+```
+
+- **`ListToolsRequestSchema`**: エージェントが「どんなツールが使えるか？」を把握するための型定義（JSON Schema）。
+- **`CallToolRequestSchema`**: 実際にツールが呼ばれた際の具体的な処理（APIリクエストとデータ抽出）。
 
 ---
 
@@ -176,8 +187,6 @@ PokeAPIのレスポンスには `data.abilities` という配列が含まれて�
 ---
 
 ## セキュリティの注意点
-
-MCP サーバーは**ローカルのプロセス**として動作する。
 
 - 信頼できないサードパーティ製サーバーの実行には注意が必要である。
 - トークンや認証情報には**最小権限の原則**を適用する。
