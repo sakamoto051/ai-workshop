@@ -6,13 +6,17 @@
   "scripts": {
     "lint:layout": "python3 .agents/scripts/check_layout.py",
     "lint:flow": "python3 .agents/scripts/check_flow.py",
+    "lint:visual": "node .agents/scripts/check_visual_overflow.js",
     "preslides:html": "npm run lint:layout && npm run lint:flow",
+    "test:slides": "npm run slides:html && npm run lint:visual",
     "slides:html": "marp --html s*/*.md",
     "slides:pdf": "marp --pdf --allow-local-files s*/*.md",
     "slides:watch": "marp --server .",
     "slides:one": "marp --html"
   },
   "devDependencies": {
-    "@marp-team/marp-cli": "^4.0.0"
+    "@marp-team/marp-cli": "^4.0.0",
+    "glob": "^13.0.6",
+    "playwright": "^1.61.1"
   }
 }
