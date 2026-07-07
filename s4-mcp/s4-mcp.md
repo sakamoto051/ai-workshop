@@ -176,6 +176,34 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 ---
 
+### 詳細: ツールの定義 (ListToolsRequestSchema)
+
+エージェントに対して「このツールが何をするか」「どんな引数が必要か」を **JSON Schema** 形式で正確に伝える。
+
+```javascript
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+  return {
+    tools: [{
+      name: "get_pokemon_info",
+      description: "ポケモンの基本情報を取得します。", // LLMがツールを選ぶ判断基準
+      inputSchema: { // 必要な引数の定義
+        type: "object",
+        properties: {
+          pokemon_name: { type: "string", description: "英語名（例: pikachu）" },
+        },
+        required: ["pokemon_name"],
+      },
+    }],
+  };
+});
+```
+
+- `description`: **極めて重要**。LLMはこの説明文を読んで、ツールを使うべきか判断する。
+- `properties.description`: 引数の説明。LLMに「どのような形式で値を渡すべきか」を指示する（例では「英語名」と具体的に指定している）。
+
+
+---
+
 ### ステップ 3: 機能拡張に挑戦 (10 分)
 
 現在のサーバーは「名前」「タイプ」「身長」「体重」しか返さない。
