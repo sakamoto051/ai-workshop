@@ -60,21 +60,30 @@ grep -n "^|" "$TARGET_FILE" | awk -F"|" '{if(NF-1 > 4) print NR": 列数="NF-1, 
 
 #### ③ 1スライドあたりの行数チェック
 Marp のデフォルトスライドに収まる目安は **本文 15〜18 行以内**。
-超過しているスライドを検出する。
+しかし、**コードブロック（``````）を含む場合は上下の余白で圧迫されるため、12〜14行以内**が目安となる。
+これらの基準を超過しているスライドを検出する。
 
 ```bash
 python3 - <<'EOF'
-import re, sys
+import re, sys, glob
 
-with open("slides/s1-intro.md") as f:
-    content = f.read()
+for filepath in glob.glob("s*/*.md"):
+    with open(filepath) as f:
+        content = f.read()
 
-slides = re.split(r'\n---\n', content)
-for i, slide in enumerate(slides[1:], 1):  # フロントマター除外
-    lines = [l for l in slide.strip().split('\n') if l.strip()]
-    if len(lines) > 18:
-        print(f"⚠️  スライド {i}: {len(lines)} 行（目安超過）")
-        print(f"   先頭: {lines[0][:60]}")
+    slides = re.split(r'\n---\n', content)
+    for i, slide in enumerate(slides[1:], 1):  # フロントマター除外
+        lines = [l for l in slide.strip().split('\n') if l.strip()]
+        has_code_block = '```' in slide
+        
+        # コードブロックを含む場合は上限を厳しくする
+        limit = 14 if has_code_block else 18
+        
+        if len(lines) > limit:
+            print(f"⚠️  {filepath} - スライド {i}: {len(lines)} 行（目安 {limit}行 超過）")
+            if has_code_block:
+                print("   ※ コードブロックを含むため、通常より表示があふれやすくなっています")
+            print(f"   先頭: {lines[0][:60]}")
 EOF
 ```
 
