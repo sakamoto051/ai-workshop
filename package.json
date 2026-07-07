@@ -5,7 +5,8 @@
   "description": "AI エージェント入門ワークショップ (Antigravity CLI 中心、Codex / Claude Code 比較)",
   "scripts": {
     "lint:layout": "python3 scripts/check_layout.py",
-    "preslides:html": "npm run lint:layout",
+    "lint:flow": "python3 scripts/check_flow.py",
+    "preslides:html": "npm run lint:layout && npm run lint:flow",
     "slides:html": "marp --html s*/*.md",
     "slides:pdf": "marp --pdf --allow-local-files s*/*.md",
     "slides:watch": "marp --server .",
