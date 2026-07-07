@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社内ポータル - システムステータス</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <span class="logo-icon"></span>
+                <h1>CorpNet Portal</h1>
+            </div>
+            <nav class="user-menu">
+                <span>ユーザー: AI Agent</span>
+            </nav>
+        </header>
+
+        <main class="dashboard-content">
+            <section class="control-panel">
+                <h2>障害情報レポートシステム</h2>
+                <p>システム全体のヘルスチェックを実行し、詳細なレポートを取得します。</p>
+                <div class="actions">
+                    <button id="runCheckBtn" class="btn-primary">ヘルスチェック実行</button>
+                    <button id="downloadBtn" class="btn-secondary" disabled>レポートダウンロード</button>
+                </div>
+            </section>
+
+            <section class="results-panel" id="resultsPanel">
+                <div class="empty-state" id="emptyState">
+                    <p>ボタンをクリックしてシステムステータスを確認してください。</p>
+                </div>
+
+                <div class="status-grid hidden" id="statusGrid">
+                    <div class="status-card success">
+                        <h3>認証基盤 (Auth)</h3>
+                        <p class="status-text">正常稼働中</p>
+                        <span class="ping">Ping: 12ms</span>
+                    </div>
+                    <div class="status-card warning">
+                        <h3>決済API (Payment)</h3>
+                        <p class="status-text">遅延発生中</p>
+                        <span class="ping">Ping: 850ms</span>
+                    </div>
+                    <div class="status-card error">
+                        <h3>顧客データベース (DB)</h3>
+                        <p class="status-text">接続エラー</p>
+                        <span class="ping">Ping: --</span>
+                    </div>
+                    <div class="status-card success">
+                        <h3>ストレージ (Storage)</h3>
+                        <p class="status-text">正常稼働中</p>
+                        <span class="ping">Ping: 45ms</span>
+                    </div>
+                </div>
+
+                <div class="incident-details hidden" id="incidentDetails">
+                    <h3>最新の障害情報</h3>
+                    <ul class="incident-list">
+                        <li><span class="badge error-badge">Critical</span> 顧客DBにて接続タイムアウトが多発しています。現在インフラチームが対応中（想定復旧時間: 2時間後）。</li>
+                        <li><span class="badge warning-badge">Warning</span> 決済APIのレイテンシが閾値を超過しています。バックアップ回線への切り替え準備中。</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

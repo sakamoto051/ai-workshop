@@ -1,0 +1,38 @@
+diff --git a/src/auth/login.py b/src/auth/login.py
+index 1234567..89abcde 100644
+--- a/src/auth/login.py
++++ b/src/auth/login.py
+@@ -10,7 +10,7 @@ def authenticate(username: str, password: str) -> User | None:
+     user = db.get_user(username)
+     if user is None:
+         return None
+-    if user.password_hash != hash_password(password):
++    if not constant_time_compare(user.password_hash, hash_password(password)):
+         return None
+     return user
+
+diff --git a/src/auth/utils.py b/src/auth/utils.py
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/auth/utils.py
+@@ -0,0 +1,8 @@
++import hmac
++
++def constant_time_compare(a: str, b: str) -> bool:
++    """タイミング攻撃を防ぐための定数時間比較。"""
++    return hmac.compare_digest(a.encode(), b.encode())
+
+diff --git a/tests/auth/test_login.py b/tests/auth/test_login.py
+index aaa..bbb 100644
+--- a/tests/auth/test_login.py
++++ b/tests/auth/test_login.py
+@@ -20,3 +20,8 @@ def test_wrong_password_returns_none():
+     create_user("alice", "correct")
+     assert authenticate("alice", "wrong") is None
++
++def test_constant_time_compare_used(monkeypatch):
++    calls = []
++    monkeypatch.setattr("src.auth.utils.constant_time_compare", lambda a, b: calls.append((a, b)) or False)
++    authenticate("alice", "any")
++    assert len(calls) == 1

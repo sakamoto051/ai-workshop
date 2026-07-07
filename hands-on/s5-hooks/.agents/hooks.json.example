@@ -1,0 +1,41 @@
+{
+  "block-dangerous": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".agents/hooks/block-dangerous.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "format-files": {
+    "PostToolUse": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".agents/hooks/format.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "audit-log": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".agents/hooks/audit.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

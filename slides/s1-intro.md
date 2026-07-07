@@ -1,0 +1,317 @@
+---
+marp: true
+theme: default
+paginate: true
+header: 'AI エージェント入門ワークショップ'
+footer: '第1回: AI Agent の全体像'
+---
+
+# 第1回. AI Agent の全体像
+## — そもそも何で、何が違うのか
+
+60 分 — 全体像をインストールしてから次回以降の各論に進む
+
+---
+
+## 本日のフロー (60 分)
+
+| 時間 | パート |
+|---|---|
+| 0-5 | イントロ + 今日のゴール |
+| 5-25 | AI Agent とは何か (主要エージェント比較含む) |
+| 25-30 | ワークショップで使う AI (Antigravity を採用) |
+| 30-40 | 講師デモ (Antigravity ライブ実演) |
+| 40-55 | ハンズオン (セットアップ + 初対話) |
+| 55-60 | ワークショップ全体地図 + Q&A |
+
+---
+
+## このセッションのゴール
+
+1. **AI Agent とは何か** を説明できる — チャット LLM との違いを自分の言葉で
+2. **主要 3 製品** (Antigravity / Codex / Claude Code) の思想と得意領域の違いを把握する
+3. **後続セッションで扱う技術**（コンテキスト管理・Skills・MCP・Hooks）の全体像をつかむ
+
+---
+
+# AI Agent とは何か
+
+---
+
+## OpenAI が定義する AI Agent
+
+> **"Agents are systems that independently accomplish tasks on your behalf."**
+> — *A Practical Guide to Building Agents*, OpenAI (2025-04)
+> https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf
+
+「エージェントとは、あなたの代わりに自律的にタスクを遂行するシステムである。」
+
+---
+
+## Anthropic が定義する AI Agent
+
+> **"Agents are systems where LLMs dynamically direct their own processes and tool usage, maintaining control over how they accomplish tasks."**
+> — *Building Effective Agents*, Anthropic (2024-12)
+> https://www.anthropic.com/research/building-effective-agents
+
+「エージェントとは、LLM が自らのプロセスとツール使用を動的に制御し、タスクの達成方法を主導するシステムである。」
+
+---
+
+## Google が定義する AI Agent
+
+> **"AI agents are software systems that use AI to pursue goals and complete tasks on behalf of users."**
+> — *What are AI agents?*, Google Cloud (2024-25)
+> https://cloud.google.com/discover/what-are-ai-agents
+
+「AI エージェントとは、ユーザーの代わりに目標を追求しタスクを完了する AI を使ったソフトウェアシステムである。」
+
+---
+
+## 三社のドキュメントから読み取れる共通点
+
+- **LLM が頭脳** — 推論・判断の中心
+- **ツール呼び出し** — 外部 API・環境と連携
+- **自律ループ** — 完了まで複数ステップを反復
+- **安全網** — ガードレール・最小権限・サンドボックス
+
+---
+
+## LLM と AI Agent の対比
+
+<style scoped>
+table {
+  font-size: 24px;
+}
+td, th {
+  padding: 6px 10px;
+}
+</style>
+
+| | LLM | AI Agent |
+|---|---|---|
+| 入力 | 渡された情報（テキスト・画像など） | ＋ リポジトリ・端末・API に自らアクセス |
+| 出力 | テキスト | ファイル編集・コマンド実行・API 呼び出し |
+| 状態 | ステートレス | 会話履歴 + ファイルシステム |
+| ループ | 単発 | 完了まで複数ステップ自律反復 |
+| 検証 | 人間がやる | 自分でテスト・lint を実行 |
+
+**LLM ＝ 聞いたことに答えてくれる**
+**AI Agent ＝ 頼んだことをやり遂げてくれる**
+
+---
+
+## AI 自律性の 5 段階 (ASDLC)
+
+<style scoped>
+table {
+  font-size: 20px;
+}
+td, th {
+  padding: 5px 8px;
+}
+</style>
+
+出典: [ASDLC - Levels of Autonomy](https://asdlc.io/concepts/levels-of-autonomy/)
+
+| レベル | 名称 | 人間の役割 | AI の行動範囲 |
+| :--- | :--- | :--- | :--- |
+| **L1** | **Assistive** (支援) | Driver (運転手) | インライン補完、対話チャット（Copilot 等） |
+| **L2** | **Task-Based** (タスク型) | Reviewer (査読者) | 単一ファイルの修正（人間が diff を手動承認） |
+| **L3** | **Conditional** (条件付自律) | Change Owner (責任者) | 複数ファイルの編集、自律実行（人間が検証） |
+| **L4** | **High** (高度自律) | Auditor (監査人) | バックログ自律実行、複数エージェントの計画 |
+| **L5** | **Full** (完全自律) | Consumer (消費者) | 人間の介在なしでシステムが自己完完・稼働 |
+
+→ 本ワークショップは **L3** が中心。L4 への入り口も一部体験します。
+
+---
+
+## 💡 AI エージェントの主要リスクと対策
+
+<style scoped>
+ul, p {
+  font-size: 20px;
+  line-height: 1.45;
+}
+</style>
+
+エージェントは自律的に動くため、チャット型とは異なるリスクが存在します。
+
+- **破壊的実行のリスク** — 不用意な `rm -rf` やコード・環境の意図しない書き換え
+  - *対策:* コマンド実行前の人間による手動承認、サンドボックス環境の利用
+- **機密情報の流出** — `.env` や秘密鍵などのデータを外部 LLM に送信してしまう
+  - *対策:* エージェント用の読み込み除外ファイル（`.gitignore` 等）の適切な設定
+- **間接的プロンプトインジェクション** — 読み込ませた外部のWebやファイルに仕込まれた指示の実行
+  - *対策:* 未信頼の外部データを処理させる際のアクション監視
+- **無限ループと課金爆発** — エラー修復の無限ループによる API トークンの大量消費
+  - *対策:* 最大ループ回数（Max Iterations）や予算リミットの設定
+- **ブラックボックス化** — 動作原理を理解しないままコード変更を承認し続ける
+  - *対策:* レビューを省略せず、エージェントに変更理由を説明させる
+
+→ **「信じて任せるが、ログは必ず監視・検証する」** のが基本姿勢です。
+
+---
+
+## 主要 3 製品と料金体系
+
+<style scoped>
+table { font-size: 26px; width: 100%; }
+td, th { padding: 10px 14px; vertical-align: middle; }
+th { text-align: center; }
+td:first-child, th:first-child { text-align: left; white-space: nowrap; }
+.logo { height: 40px; width: auto; vertical-align: middle; opacity: 0.95; }
+.note { font-size: 18px; color: #666; margin-top: 8px; }
+</style>
+
+| | <img src="images/antigravity.png" class="logo" style="height:36px;width:36px;" /><br>**Antigravity CLI** | <img src="images/openai.svg" class="logo" /><br>**Codex CLI** | <img src="images/claude.svg" class="logo" /><br>**Claude Code** |
+|---|:---:|:---:|:---:|
+| **開発元** | Google | OpenAI | Anthropic |
+| **無料枠** | あり | あり | なし |
+| **有料** | Google AI Pro: ¥2,900/月 <br> Google AI Ultra: ¥14,500/月 | Go: ¥1,400/月 <br> Plus: ¥3,000/月 <br> Pro: ¥16,800/月 | Pro: $20/月 <br> Max: $110/月 |
+
+---
+
+# ワークショップで使う AI
+
+---
+
+## 本ワークショップでは Antigravity CLI を使う
+
+1. **無料枠** — 参加者全員が同じ条件で触れる
+2. **準備が簡単** — Google アカウントのみ
+3. **SKILL / MCP / Hooks の概念は共通** — Antigravity で学べば他にも応用が効く
+
+---
+
+## ワークショップの構図
+
+**テーマ: 「AI Agent を概念で理解し、現場で使いこなす」**
+
+<style scoped>
+table { font-size: 22px; width: 100%; margin-top: 10px; }
+td, th { padding: 8px 12px; }
+.flow { font-size: 21px; margin-top: 14px; }
+</style>
+
+| 第1回 | 第2回 | 第3回 | 第4回 | 第5回 | 第6回 |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| 全体像の説明（今回） | コンテキスト<br>+ 指示 | ワークフロー<br>再利用 | ツール拡張<br>(MCP) | 挙動の制御<br>/ 安全性 | 業務へ<br>持ち帰る |
+
+<div class="flow">
+
+- **使う AI は Antigravity CLI** で統一 — 全員が同じ条件で「動かす」
+- 各セッションで **「Codex / Claude なら?」** を併記 → 製品にロックインしない
+- ゴールは **概念を学び、判断を養う** こと。持ち帰って自チームに合わせて選ぶ
+
+</div>
+
+---
+
+# 講師デモ (10 分)
+
+---
+
+## ライブで実演する 3 つ
+
+ライブで Antigravity CLI を起動して見せる:
+
+1. **コード読解**: 「`calc.py` を読んで、何をするコードか教えて」
+2. **編集 + 実行**: 「`hello.py` を作って、`Hello, agent!` を出力させて」
+3. **マルチモーダル**: 画面のスクショを渡して「これと同じ UI を React で」
+
+→ 「**書ける**」「**読める**」「**目が使える**」を体感
+
+---
+
+# ハンズオン (15 分)
+
+---
+
+## セットアップ + 初対話
+
+```bash
+# インストール
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+
+# 初回起動 (Google アカウントでログイン)
+agy
+```
+
+接続できたら次を試す:
+
+1. 「このディレクトリのファイルを教えて」
+2. 「`hello.py` を作って "Hello, agent!" を出力させて」
+3. `python hello.py` で実行確認
+
+困ったら: [docs/setup.md](../docs/setup.md) / [docs/troubleshooting.md](../docs/troubleshooting.md)
+
+---
+
+## 観察ポイント
+
+- エージェントが **どのツールを呼ぶか** (実行前にプロンプトが出るか?)
+- **自動承認** されるもの / 確認を求められるもの
+- 同じ依頼を **言い回しを変える** と挙動が変わるか
+
+→ 違和感や疑問を書き留めておく。**第2回以降で全部回収する**。
+
+---
+
+# ワークショップ全体地図
+
+---
+
+## 第1回〜第6回で学ぶこと
+
+<style scoped>
+table { font-size: 22px; }
+td, th { padding: 8px 12px; }
+</style>
+
+| # | テーマ | ひとことで言うと |
+|---|---|---|
+| **第1回** | **AI Agent の全体像** ← 今ここ | エージェントとは何かを掴む |
+| 第2回 | コンテキスト管理 + プロンプト設計 | **AI に何を・どう伝えるか** |
+| 第3回 | Skills / カスタムコマンド / Sub-agents | **よく使う手順を再利用する** |
+| 第4回 | MCP (外部ツール・データへの接続) | **AI のできることを増やす** |
+| 第5回 | Hooks + 安全運用 + Plan モード | **AI の挙動を制御し安全に動かす** |
+| 第6回 | 総合演習 + ROI 測定 + チーム導入 | **学びを業務に持ち帰る** |
+
+---
+
+## 各セッションは独立して受講可能
+
+事情で参加できない回があっても、別回から復帰できる構成。
+資料も各回の HTML で単体閲覧可能。
+
+ただし、**第2回はできるだけ受講推奨** (プロンプト設計は全回の前提)。
+
+---
+
+## まとめ
+
+- **AI Agent** = LLM + ツール + ループ + コンテキストの 4 要素
+- **自律度 L3 (実行)** が現在の主戦場、L4 (自走) が次のフロンティア
+- 3 製品は **思想の違い** で選ぶ。Antigravity は「学習コスト最小、概念最大」で本講座の主軸
+- **「賢いが万能ではない」** — 安全網と検証で使いこなす
+- 次回 (第2回): コンテキスト管理とプロンプト設計で **指示の質を整える**
+
+---
+
+## 参考
+
+- Antigravity CLI: https://antigravity.google
+- Codex CLI: https://github.com/openai/codex
+- Claude Code: https://docs.claude.com/claude-code
+- MCP: https://modelcontextprotocol.io
+- 機能比較: [docs/comparison.md](../docs/comparison.md)
+- ROI ケース集: [docs/roi-cases.md](../docs/roi-cases.md)
+
+### AI Agent 定義の一次出典
+
+- **OpenAI** — *A Practical Guide to Building Agents* (2025-04): https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf
+- **OpenAI** — Agents SDK ドキュメント: https://platform.openai.com/docs/guides/agents
+- **Anthropic** — *Building Effective Agents* (2024-12): https://www.anthropic.com/research/building-effective-agents
+- **Anthropic** — NIST RFI on Agentic Security (2025): https://www.anthropic.com/policy/rfi-on-ai-agents
+- **Google Cloud** — *What are AI agents?*: https://cloud.google.com/discover/what-are-ai-agents
+- **Google DeepMind** — AI Control Roadmap (2026): https://deepmind.google/discover/blog/

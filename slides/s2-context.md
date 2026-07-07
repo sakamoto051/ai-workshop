@@ -1,0 +1,239 @@
+---
+marp: true
+theme: default
+paginate: true
+header: 'AI エージェント入門ワークショップ'
+footer: 'S2: コンテキスト管理 + プロンプト設計 + 基本操作'
+---
+
+# コンテキスト管理
+## 〜トークン・時間・精度を数値で最適化する〜
+
+エージェントに **前提条件と枠組みを与える** 技術
+
+---
+
+## 本日の流れ (60 分)
+
+| 時間 | パート |
+|---|---|
+| 0-5 | イントロ + 今日の Before/After (数値指標) |
+| 5-20 | 不要ファイルの除外設定 (トークン削減) |
+| 20-30 | 暗黙ルールの明文化: `AGENTS.md` (手戻り削減) |
+| 30-40 | プロンプト設計の 4 原則 |
+| 40-55 | ハンズオン (Before/After 数値測定) |
+| 55-60 | まとめ + 3 製品比較 |
+
+---
+
+## このセッションのゴール
+
+- コンテキスト管理がもたらす効果を数値で理解する
+- `AGENTS.md` を作成し、プロジェクトのルールを設定できる
+- 不要ファイルの除外設定やプロンプト改善により、消費トークンを削減できる
+
+---
+
+# そもそも「コンテキスト」とは？
+
+---
+
+## コンテキスト = エージェントが「見えている」情報の総量
+
+- **コンテキスト**とは、エージェントが応答を生成する時に参照している入力全体のこと。
+- これが収まる入力の大きさが コンテキストウィンドウ（トークン数の上限）。
+- エージェントは記憶力が良いのではなく、毎回ウィンドウの中身を丸ごと読み直して推測しているだけ。
+
+---
+
+## コンテキストウィンドウの中身と構造
+
+<style scoped>
+.cw-cap { text-align: center; font-size: 16px; font-weight: bold; color: #555; margin-bottom: 4px; white-space: nowrap; }
+table { font-size: 19px; margin-bottom: 20px; border-collapse: collapse; }
+td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
+.main-container { display: flex; gap: 50px; align-items: center; justify-content: center; margin-top: 20px; }
+.cw-box { width: 320px; border: 3px solid #333; border-radius: 6px; display: flex; flex-direction: column; overflow: hidden; }
+.band { padding: 12px 15px; font-size: 16px; color: #fff; }
+.b-sys  { background: #9aa0a6; flex: 0 0 auto; }
+.b-hist { background: #fb8c00; flex: 1 1 auto; }
+.b-proj { background: #4285f4; flex: 0 0 auto; }
+.b-tool { background: #e53935; flex: 2 1 auto; }
+.b-free { background: repeating-linear-gradient(45deg, #f8f9fa, #f8f9fa 10px, #e8eaed 10px, #e8eaed 20px); color: #777; flex: 1 1 auto; display: flex; align-items: center; justify-content: center; border-top: 2px dashed #999; }
+.tag { display:inline-block; width:15px; height:15px; border-radius:3px; margin-right:8px; vertical-align:middle; }
+</style>
+
+<div class="main-container">
+
+<!-- 左側: 図 -->
+<div>
+  <div class="cw-cap">▼ ウィンドウサイズ（上限）</div>
+  <div class="cw-box" style="height: 400px;">
+    <!-- 減らせない部分 -->
+    <div class="band b-sys">システムプロンプト</div>
+    <div class="band b-hist">会話履歴</div>
+    <div class="band b-proj">プロジェクト指示</div>
+    <div class="band b-tool">ツール実行結果・読込</div>
+    <div class="band b-free">空き（残量）</div>
+  </div>
+</div>
+
+<!-- 右側: 表（凡例兼用） -->
+<div>
+
+<table>
+  <thead>
+    <tr><th>中身</th><th>具体例</th><th>性質</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span style="color:#9aa0a6">■</span> <b>システムプロンプト</b></td><td>エージェントの指示・ツール</td><td>固定</td></tr>
+    <tr><td><span style="color:#fb8c00">■</span> <b>会話履歴</b></td><td>過去の指示と応答</td><td>増える</td></tr>
+    <tr><td><span style="color:#4285f4">■</span> <b>プロジェクト指示</b></td><td><code>AGENTS.md</code>等</td><td>簡潔に書く</td></tr>
+    <tr><td><span style="color:#e53935">■</span> <b>ツール実行結果</b></td><td>読込ファイル・出力等</td><td>一番膨らむ</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+</div>
+
+---
+
+## コンテキストウィンドウのサイズ比較
+<style scoped> table { font-size: 0.85em; } </style>
+
+| エージェント | ベースモデル | コンテキストウィンドウ |
+|---|---|---|
+| **Antigravity** (Gemini) | Gemini 3.5 Flash | **1M** |
+| | Gemini 3.1 Pro | **1M** |
+| **Codex** (OpenAI) | GPT-5.5 | **1M** |
+| | GPT-5.4 | **1M** |
+| | GPT-5.4 Mini | **400K** |
+| **Claude Code** (Anthropic) | Opus 4.8 | **1M** |
+| | Sonnet 4.6 | **1M** |
+| | Haiku 4.5 | **200K** |
+
+> 出典: [Gemini Models](https://ai.google.dev/gemini-api/docs/models/gemini) / [OpenAI Models](https://platform.openai.com/docs/models) / [Claude Models](https://docs.anthropic.com/en/docs/about-claude/models)
+
+---
+
+## なぜコンテキスト管理が必要なのか？
+
+1. **無駄なトークン消費**: 不要なログやキャッシュを読み込み無駄な課金が発生する。
+2. **手戻りの発生**: 手順が伝わらずエラーと修正を何度も繰り返す。
+3. **無秩序なコードの混入**: 一般論で解決しようとし、規約を無視したコードが書かれる。
+
+金銭的にも時間的にも無駄し、アウトプットを質を高めるために重要
+
+---
+
+## 対策①: 不要ファイルの除外設定
+
+> エージェントに見せたくないファイルを隠してトークンを節約
+
+- **`.gitignore` による除外 (基本)**
+  - `agy` はデフォルトで `.gitignore` を尊重し、探索対象から除外する。
+  - ログ、キャッシュ、巨大データ、`node_modules/` 等はここに記載。
+- **AI 専用の除外 (設定ファイルによる防御)**
+  - Git管理下にあるが AI には読ませたくないファイルは、`agy` のグローバル設定 (`settings.json` の `permissions`) で拒否（Deny）する。
+
+---
+
+## 対策②: `AGENTS.md` によるルールの設定
+
+> プロジェクトのルールをファイルに集約する
+
+- **コンテキストの提供**: プロジェクト概要・技術スタック・背景
+- **明確で具体的な指示**: 開発用コマンド、コーディング規約、AIの振る舞い
+- **例の提示**: 出力形式やコードの具体例
+- **構造化**: Markdown見出しや区切り文字でルールを整理して記述する
+
+**配置**: 
+- プロジェクト固有: `.agents/AGENTS.md`
+- 共通: `~/.gemini/config/AGENTS.md`
+
+---
+
+## `AGENTS.md` 記述例
+
+```markdown
+# 1. 前提知識とルール（コンテキストと明確な指示）
+- 本システムは Next.js と Tailwind CSS を使用する。
+- UIコンポーネントは `src/components` 配下に作成すること。
+- パッケージ追加時は `npm` ではなく必ず `pnpm` を使用すること。
+- ...
+
+# 2. 命名規則とフォーマット（例の提示と構造化）
+- クラス名: `PascalCase` (例: `UserController`)
+- JSON を出力する際は、以下の区切り文字に従うこと。
+###
+{ "status": "success", "data": "..." }
+###
+...
+```
+
+**ポイント**: トークンを節約のため、詳細な規約は別ファイルに切り出すことも検討する
+
+---
+
+## ハンズオン: コンテキスト管理の実践 (15分)
+
+`hands-on/s2-basics/` にて、以下の2点を中心に実行・確認する。
+
+1. **`/context` の使い方と見方**
+   - 画面出力（または画像）を見ながら、コンテキスト使用量の各種カテゴリの意味を理解する。
+2. **`AGENTS.md` 変更による `/context` の変化**
+   - 実際に `AGENTS.md` を編集し、ファイル切り出し前後でのトークン数の変化を測定する。
+
+---
+
+## ① /context
+
+最初は、プロジェクトの様々なルールや規約が `AGENTS.md` に直接すべて記述されている状態を想定する。
+
+| プロンプト（`AGENTS.md`） | コンテキスト（`/context`） |
+| :---: | :---: |
+| ![w:500](./images/sample1-agentsmd.png) | ![w:500](./images/sample1.png) |
+
+---
+
+## ① /context
+
+- **User messages / Agent responses**: ユーザーの入力とAIの返答
+- **Tool calls**: AIのツール呼び出しによる消費
+- **System prompt / tools**: AIが動作するための基本命令とツールの仕様書（今回はここに長文ルールが含まれて肥大化している）
+- **Skills**: スキルの定義の読み込み
+- **Subagents**: サブエージェントの定義の読み込み
+- **Free space**: 残りのコンテキストウィンドウ
+- **Checkpoint buffer**: 巻き戻し用にシステムが保存している状態データ
+
+---
+
+## ② プロンプトの変更による/contextの変化
+
+肥大化したコンテキストを削減するため、`AGENTS.md` に直接長文の規約を記述するのではなく、別ファイルへ切り出してリンクする設定に変更する。
+
+| プロンプト（`AGENTS.md`） | コンテキスト（`/context`） |
+| :---: | :---: |
+| ![w:500](./images/sample2-agentsmd.png) | ![w:500](./images/sample2.png) |
+
+---
+
+## 変更前後でのコンテキスト消費量の比較
+
+ファイル分割を行うことで、System prompt（ツールの仕様等を含む）の消費量が大幅に削減されたことが確認できる。
+
+| 変更前 (`/context`) | 変更後 (`/context`) |
+| :---: | :---: |
+| ![w:500](./images/sample1.png) | ![w:500](./images/sample2.png) |
+
+---
+
+## まとめ
+
+- **不要な記憶を削り、必要な知識を与える**
+  - ファイル分割等を活用し、コンテキストの圧迫を防ぐことでパフォーマンス低下を回避する。
+- **推測ではなく、`/context` で状態を可視化する**
+  - トークンが何に消費されているか定期的に把握し、スリム化する習慣をつける。
+
+次回: Skillsについて

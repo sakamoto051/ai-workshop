@@ -1,0 +1,15 @@
+{
+  "name": "ai-agent-workshop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI エージェント入門ワークショップ (Antigravity CLI 中心、Codex / Claude Code 比較)",
+  "scripts": {
+    "slides:html": "marp --input-dir slides -o dist --html",
+    "slides:pdf": "marp --input-dir slides -o dist --pdf --allow-local-files",
+    "slides:watch": "marp --server slides/",
+    "slides:one": "marp --html"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.0.0"
+  }
+}

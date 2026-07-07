@@ -1,0 +1,12 @@
+## 2. 極限のコーディング規約・静的解析・型安全性
+- TypeScriptの `tsconfig.json` 設定:
+  - `strict`: true は当然として、`noUncheckedIndexedAccess`: true を追加し、配列やオブジェクトからのアクセス時に自動で `undefined` 型を付与させることで実行時エラーを撲滅する。
+  - `exactOptionalPropertyTypes`: true により、省略可能なプロパティに明示的に `undefined` を代入するアンチパターンを防止する。
+- 命名規則の更なる詳細化:
+  - ブーリアン型の変数は、必ず `is`, `has`, `should`, `can` のいずれかのプレフィックスから始めること（例：`isVisible`, `hasChildren`）。
+  - イベントハンドラの命名は、プロパティ名は `on` ＋イベント名（`onClick`）、実装関数名は `handle` ＋イベント名（`handleClick`）で統一する。
+- 関数型プログラミングのパラダイム適用:
+  - `for` ループや `while` ループの使用を原則禁止し、`map`, `filter`, `reduce` などの高階関数を使用して宣言的に記述すること。
+  - 副作用（Side Effect）を持つ関数と純粋関数（Pure Function）をディレクトリレベルまたは命名で明確に分離し、ロジックのテスト容易性を最大化する。
+- エラーハンドリングの標準化:
+  - 例外（throw/catch）による制御フローを禁止する。代わりに `Result` 型（Eitherモナド等）を導入し、関数の戻り値として `Result<SuccessType, ErrorType>` を返す設計を強制する。これにより呼び出し元でのエラーハンドリングをコンパイラレベルで強制する。
