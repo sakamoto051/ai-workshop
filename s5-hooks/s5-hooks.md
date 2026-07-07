@@ -137,13 +137,13 @@ footer: 'S5: Hooks + 安全運用'
 INPUT=$(cat)
 CMD=$(echo "$INPUT" | jq -r '.command // empty')
 if [[ "$CMD" =~ rm[[:space:]]+-rf|:\(\)\{.*\}: ]]; then
-  echo '{"decision": "deny", "reason": "危険コマンドをブロックしました"}'
+  echo '{"decision": "deny", "reason": "危険コマンドをブロックした"}'
   exit 0
 fi
 echo '{"decision": "allow"}'
 ```
 
-`agy` 起動 → 「`rm -rf /tmp/test` 実行して」と頼んでブロックを確認。
+`agy` 起動 → 「`rm -rf /tmp/test` 実行しろ」と頼んでブロックを確認。
 
 ---
 

@@ -200,12 +200,12 @@
 INPUT=$(<span class="hljs-built_in">cat</span>)
 CMD=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$INPUT</span>&quot;</span> | jq -r <span class="hljs-string">&#x27;.command // empty&#x27;</span>)
 <span class="hljs-keyword">if</span> [[ <span class="hljs-string">&quot;<span class="hljs-variable">$CMD</span>&quot;</span> =~ <span class="hljs-built_in">rm</span>[[:space:]]+-rf|:\(\)\{.*\}: ]]; <span class="hljs-keyword">then</span>
-  <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;decision&quot;: &quot;deny&quot;, &quot;reason&quot;: &quot;危険コマンドをブロックしました&quot;}&#x27;</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;decision&quot;: &quot;deny&quot;, &quot;reason&quot;: &quot;危険コマンドをブロックした&quot;}&#x27;</span>
   <span class="hljs-built_in">exit</span> 0
 <span class="hljs-keyword">fi</span>
 <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;decision&quot;: &quot;allow&quot;}&#x27;</span>
 </code></pre>
-<p><code>agy</code> 起動 → 「<code>rm -rf /tmp/test</code> 実行して」と頼んでブロックを確認。</p>
+<p><code>agy</code> 起動 → 「<code>rm -rf /tmp/test</code> 実行しろ」と頼んでブロックを確認。</p>
 <footer>S5: Hooks + 安全運用</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="10" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S5: Hooks + 安全運用" data-theme="default" lang="C" data-marpit-pagination="10" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S5: Hooks + 安全運用;--theme:default;" data-marpit-pagination-total="21">

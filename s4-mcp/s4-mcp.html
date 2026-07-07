@@ -55,7 +55,7 @@
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="3" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="3" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h2 id="%E3%81%93%E3%81%AE%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E3%82%B4%E3%83%BC%E3%83%AB">このセッションのゴール</h2>
-<p>本セッション終了時に、以下の状態になることを目指します。</p>
+<p>本セッション終了時に、以下の状態になることを目指す。</p>
 <ol>
 <li><strong>MCPの役割と技術的意義を理解する</strong><br />
 エージェントと外部システムを繋ぐ標準プロトコルとしての役割を把握する。</li>
@@ -71,7 +71,7 @@ Python（FastMCP）を用いて、自社特有のシステムをAI対応化で�
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="4" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="4" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h2 id="mcp-%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%8B">MCP とは何か</h2>
-<p><strong>Model Context Protocol (MCP)</strong> は、AIエージェントに「ツール」を提供するための標準プロトコルです。</p>
+<p><strong>Model Context Protocol (MCP)</strong> は、AIエージェントに「ツール」を提供するための標準プロトコルである。</p>
 <ul>
 <li>Anthropic が提唱したオープンスタンダード。</li>
 <li>クライアント（エージェント）とサーバー（ツール）間を双方向で繋ぐ。</li>
@@ -85,26 +85,26 @@ Python（FastMCP）を用いて、自社特有のシステムをAI対応化で�
 <p><strong>【Before】ツール連携の独自統合と N 対 M 問題</strong><br />
 MCPの登場以前は、外部サービスと連携するには独自の統合コードを書く必要があった。そのため、<strong>アプリM個 × 連携先サービスN個</strong> を個別に管理する必要があった。</p>
 <p><strong>【After】Anthropic による標準化の提唱</strong><br />
-2024年に Anthropic が MCP をオープンソースとして公開しました。クライアントとツールの通信仕様を標準化し、「AI版 USB Type-C」「AI版 LSP」のような役割を果たした。</p>
+2024年に Anthropic が MCP をオープンソースとして公開した。クライアントとツールの通信仕様を標準化し、「AI版 USB Type-C」「AI版 LSP」のような役割を果たした。</p>
 <p>これにより、一度作成した MCP サーバーはあらゆるクライアント環境でそのまま動作するようになり、 <strong>アプリM個 + 連携先サービスN個</strong> の管理になった。</p>
 <footer>S4: MCP 編</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="6" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="6" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h2 id="%E3%81%AA%E3%81%9C-mcp-%E3%81%8C%E5%BF%85%E8%A6%81%E3%81%AA%E3%81%AE%E3%81%8B">なぜ MCP が必要なのか</h2>
-<p>LLM 単体では、学習時点の知識しか持たず、社内システムや最新データに直接アクセスできません。</p>
+<p>LLM 単体では、学習時点の知識しか持たず、社内システムや最新データに直接アクセスできない。</p>
 <ul>
 <li><strong>自動化のシームレス化</strong><br />
-人間が手動でデータを探してコピペする手間がなくなり、エージェントが自律的に社内システムへアクセス可能になります。</li>
+人間が手動でデータを探してコピペする手間がなくなり、エージェントが自律的に社内システムへアクセス可能になる。</li>
 <li><strong>拡張性の高さ (Plug &amp; Play)</strong><br />
-一度 MCP サーバーを書けば、プロトコルに対応するすべてのクライアント（Antigravity、Claude Code 等）から利用可能になります。</li>
+一度 MCP サーバーを書けば、プロトコルに対応するすべてのクライアント（Antigravity、Claude Code 等）から利用可能になる。</li>
 </ul>
 <footer>S4: MCP 編</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="7" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="7" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h2 id="%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%A6%E3%82%A3%E3%83%B3%E3%83%89%E3%82%A6%E3%81%B8%E3%81%AE%E5%BD%B1%E9%9F%BF%E3%81%A8%E5%AF%BE%E7%AD%96">コンテキストウィンドウへの影響と対策</h2>
-<p>MCP ツールが返すデータ（DBのレコードや長大なAPIレスポンス）は、<strong>すべてLLMのコンテキスト（トークン）を消費</strong>します。</p>
+<p>MCP ツールが返すデータ（DBのレコードや長大なAPIレスポンス）は、<strong>すべてLLMのコンテキスト（トークン）を消費</strong>する。</p>
 <p><strong>課題とリスク</strong><br />
 無闇に使うと、コンテキスト上限に達して精度が落ちたり、利用上限に達したりとコストが高騰する。</p>
 <p><strong>対策のベストプラクティス</strong></p>
@@ -171,46 +171,46 @@ MCPの登場以前は、外部サービスと連携するには独自の統合�
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="12" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="12" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h2 id="%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3%E5%9B%B3%E9%91%91-mcp-%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E6%8B%A1%E5%BC%B5-25-%E5%88%86">ハンズオン：ポケモン図鑑 MCP サーバーの拡張 (25 分)</h2>
-<p>完成済みのシンプルなMCPサーバーをエージェントに統合して動作を確認したのち、実際にコードを書き換えて機能を拡張します。<br />
-APIキー不要のパブリックAPI（PokéAPI）をラップしたサーバーを通じて、MCPの仕組みを実践的に理解します。</p>
+<p>完成済みのシンプルなMCPサーバーをエージェントに統合して動作を確認したのち、実際にコードを書き換えて機能を拡張する。<br />
+APIキー不要のパブリックAPI（PokéAPI）をラップしたサーバーを通じて、MCPの仕組みを実践的に理解する。</p>
 <h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97-1-%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%B3%E3%81%A8%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D-10-%E5%88%86">ステップ 1: クローンと動作確認 (10 分)</h3>
-<p>用意されたリポジトリを利用し、エージェントへの統合を体験します。</p>
+<p>用意されたリポジトリを利用し、エージェントへの統合を体験する。</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash"><span class="hljs-built_in">cd</span> hands-on/pokemon-mcp-server
 npm install
 </code></pre>
 <ol>
-<li>お使いのAIエージェント（agy等）にMCP設定を追加し、サーバーを登録します。</li>
-<li>エージェントに「リザードンのタイプと体重を教えて」と質問し、API経由で情報を取得して回答することを確認します。</li>
+<li>AIエージェント（agy等）にMCP設定を追加し、サーバーを登録する。</li>
+<li>エージェントに「リザードンのタイプと体重を教えて」と質問し、API経由で情報を取得して回答することを確認する。</li>
 </ol>
 <footer>S4: MCP 編</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="13" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97-2-%E3%82%B3%E3%83%BC%E3%83%89%E6%A7%8B%E9%80%A0%E3%81%AE%E7%90%86%E8%A7%A3-5-%E5%88%86">ステップ 2: コード構造の理解 (5 分)</h3>
-<p><code>index.js</code> の主要な構成要素（約40行）を確認します。</p>
+<p><code>index.js</code> の主要な構成要素（約40行）を確認する。</p>
 <ul>
-<li><strong>ツールの定義</strong>: <code>ListToolsRequestSchema</code> で <code>get_pokemon_info</code> ツールと引数の型（JSON Schema）を定義します。</li>
-<li><strong>処理の実装</strong>: <code>CallToolRequestSchema</code> 内で外部API（PokéAPI）を叩き、取得したJSONから必要な文字列を抽出して返します。</li>
+<li><strong>ツールの定義</strong>: <code>ListToolsRequestSchema</code> で <code>get_pokemon_info</code> ツールと引数の型（JSON Schema）を定義する。</li>
+<li><strong>処理の実装</strong>: <code>CallToolRequestSchema</code> 内で外部API（PokéAPI）を叩き、取得したJSONから必要な文字列を抽出して返す。</li>
 </ul>
 <footer>S4: MCP 編</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="14" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h3 id="%E3%82%B9%E3%83%86%E3%83%83%E3%83%97-3-%E6%A9%9F%E8%83%BD%E6%8B%A1%E5%BC%B5%E3%81%AB%E6%8C%91%E6%88%A6-10-%E5%88%86">ステップ 3: 機能拡張に挑戦 (10 分)</h3>
-<p>現在のサーバーは「名前」「タイプ」「身長」「体重」しか返しません。<br />
-エージェントが**「ポケモンの特性（abilities）」**も答えられるように、コードを拡張してみましょう。</p>
+<p>現在のサーバーは「名前」「タイプ」「身長」「体重」しか返さない。<br />
+エージェントが**「ポケモンの特性（abilities）」**も答えられるように、コードを拡張してみよう。</p>
 <p><strong>ヒント</strong>:<br />
-PokeAPIのレスポンスには <code>data.abilities</code> という配列が含まれています。これを <code>.map()</code> 等で展開し、返す文字列（<code>text</code>変数）に追加します。修正後はサーバープロセスを再起動して動作を確認してください。</p>
+PokeAPIのレスポンスには <code>data.abilities</code> という配列が含まれている。これを <code>.map()</code> 等で展開し、返す文字列（<code>text</code>変数）に追加する。修正後はサーバープロセスを再起動して動作を確認する。</p>
 <footer>S4: MCP 編</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" data-paginate="true" data-header="AI エージェント入門ワークショップ" data-footer="S4: MCP 編" data-theme="default" lang="C" data-marpit-pagination="15" style="--paginate:true;--header:AI エージェント入門ワークショップ;--footer:S4: MCP 編;--theme:default;" data-marpit-pagination-total="16">
 <header>AI エージェント入門ワークショップ</header>
 <h2 id="%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E3%81%AE%E6%B3%A8%E6%84%8F%E7%82%B9">セキュリティの注意点</h2>
-<p>MCP サーバーは<strong>ローカルのプロセス</strong>として動作します。</p>
+<p>MCP サーバーは<strong>ローカルのプロセス</strong>として動作する。</p>
 <ul>
-<li>信頼できないサードパーティ製サーバーの実行には注意が必要です。</li>
-<li>トークンや認証情報には<strong>最小権限の原則</strong>を適用してください。</li>
-<li>Filesystem 等のローカルリソースを扱うサーバーでは、<strong>アクセス許可するパス（ディレクトリ）を厳密に制限</strong>することが必須です。</li>
+<li>信頼できないサードパーティ製サーバーの実行には注意が必要である。</li>
+<li>トークンや認証情報には<strong>最小権限の原則</strong>を適用する。</li>
+<li>Filesystem 等のローカルリソースを扱うサーバーでは、<strong>アクセス許可するパス（ディレクトリ）を厳密に制限</strong>することが必須である。</li>
 </ul>
 <footer>S4: MCP 編</footer>
 </section>
@@ -219,11 +219,11 @@ PokeAPIのレスポンスには <code>data.abilities</code> という配列が�
 <h2 id="%E3%81%BE%E3%81%A8%E3%82%81">まとめ</h2>
 <ul>
 <li><strong>MCP はエージェントの拡張インターフェース</strong><br />
-社内システムやツールを容易に接続し、自律的な操作を可能にします。</li>
+社内システムやツールを容易に接続し、自律的な操作を可能にする。</li>
 <li><strong>コンテキスト管理が実運用の鍵</strong><br />
-必要なデータだけを絞り込んで取得する設計が不可欠です。</li>
+必要なデータだけを絞り込んで取得する設計が不可欠である。</li>
 <li><strong>自作のハードルは極めて低い</strong><br />
-FastMCP 等を活用すれば、既存の社内資産を簡単に AI 対応化できます。</li>
+FastMCP 等を活用すれば、既存の社内資産を簡単に AI 対応化できる。</li>
 </ul>
 <footer>S4: MCP 編</footer>
 </section>
