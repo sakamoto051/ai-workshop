@@ -27,7 +27,7 @@ def check_layout():
             has_code_block = '```' in slide
             
             # 1. Line count check
-            limit = 16 if has_code_block else 20
+            limit = 14 if has_code_block else 18
             if len(lines) > limit:
                 # S2 slide 6 contains mostly raw HTML, so we might want to skip it, but to be strictly foolproof we enforce it unless specifically bypassed.
                 # However, to avoid breaking currently perfectly formatted HTML-based slides, we can exclude `<style scoped>`

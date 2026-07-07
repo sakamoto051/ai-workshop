@@ -152,28 +152,24 @@ const server = new Server(
 
 ### 詳細: ツールの定義 (ListToolsRequestSchema)
 
-エージェントに対して「このツールが何をするか」「どんな引数が必要か」を **JSON Schema** 形式で正確に伝える。
+「このツールが何をするか」「どんな引数が必要か」をエージェントに定義する。
 
 ```javascript
-server.setRequestHandler(ListToolsRequestSchema, async () => {
-  return { tools: [{
-    name: "get_pokemon_info",
-    description: "ポケモンの基本情報を取得します。",
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [{
+    name: "get_pokemon_info", description: "ポケモンの基本情報を取得します。",
     inputSchema: { type: "object", properties: {
-      pokemon_name: { type: "string", description: "英語名（例: pikachu）" }
+      pokemon_name: { type: "string", description: "英語名" }
     }, required: ["pokemon_name"] }
-  }] };
-});
+  }]
+}));
 ```
-
-- `description`: **極めて重要**。LLMはこの説明文を読んで、ツールを使うべきか判断する。
-- `properties.description`: 引数の説明。LLMに「どのような形式で値を渡すべきか」を指示する（例では「英語名」と具体的に指定している）。
+- **`description`**: 最重要。LLMがツールを選ぶ判断基準となる。
+- **`properties`**: 引数の型と説明。LLMが値を推論する助けになる。
 
 ---
 
 ### 詳細: 処理の実装 (CallToolRequestSchema)
-
-エージェントがツールを呼び出した際の具体的な処理（APIリクエストやデータ整形）を記述する。
 
 ```javascript
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -186,10 +182,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 });
 ```
-
-- **ツールの分岐**: `request.params.name` にツール名（`get_pokemon_info`）が入る。複数のツールがある場合はここで `if` や `switch` を使って処理を分岐させる。
-- **引数の受け取り**: `request.params.arguments` にLLMが生成した引数が入っている。
-- **戻り値**: `content` 配列の中に `{ type: "text", text: "..." }` の形式で文字列を返す。このテキストがLLMのコンテキストとして読み込まれる。
+- **分岐と引数**: `request.params.name` で分岐し、`arguments` から値を取得する。
+- **戻り値**: `content` 配列に文字列を入れて返す。これがLLMのコンテキストになる。
 
 
 ---
