@@ -4,9 +4,9 @@
   "private": true,
   "description": "AI エージェント入門ワークショップ (Antigravity CLI 中心、Codex / Claude Code 比較)",
   "scripts": {
-    "slides:html": "marp --input-dir slides -o dist --html",
-    "slides:pdf": "marp --input-dir slides -o dist --pdf --allow-local-files",
-    "slides:watch": "marp --server slides/",
+    "slides:html": "marp --html s*/*.md",
+    "slides:pdf": "marp --pdf --allow-local-files s*/*.md",
+    "slides:watch": "marp --server .",
     "slides:one": "marp --html"
   },
   "devDependencies": {
