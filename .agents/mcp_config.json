@@ -6,6 +6,10 @@
       "env": {
         "HEADLESS": "true"
       }
+    },
+    "pokemon": {
+      "command": "node",
+      "args": ["/home/t-sakamoto/study/workshop/s4-mcp/hands-on/pokemon-mcp-server/index.js"]
     }
   }
 }

@@ -6,17 +6,22 @@ const server = new Server({ name: "pokemon-server", version: "1.0.0" }, { capabi
 
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [{
-      name: "get_pokemon_info",
-      description: "ポケモンの基本情報を取得します。",
-      inputSchema: {
-        type: "object",
-        properties: {
-          pokemon_name: { type: "string", description: "英語名（例: pikachu）" },
+    tools: [
+      {
+        name: "get_pokemon_info",
+        description: "ポケモンの基本情報を取得します。",
+        inputSchema: {
+          type: "object",
+          properties: {
+            pokemon_name: {
+              type: "string",
+              description: "英語名（例: pikachu）",
+            },
+          },
+          required: ["pokemon_name"],
         },
-        required: ["pokemon_name"],
       },
-    }],
+    ],
   };
 });
 

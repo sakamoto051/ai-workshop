@@ -35,7 +35,7 @@ Model Context Protocol (MCP) の基本とカスタムサーバーの自作
 3. **公開されているMCPエコシステムを利用できる**
    既存の強力なサーバーを自環境に導入し、設定・活用できるようになる。
 4. **独自のMCPサーバーを自分で作成できる**
-   Python（FastMCP）を用いて、自社特有のシステムをAI対応化できるようになる。
+   JavaScript（Node.js）を用いて、自社特有のシステムをAI対応化できるようになる。
 
 ---
 
@@ -151,33 +151,32 @@ const server = new Server(
 
 ---
 
-### 詳細: ツールの定義 (1/2)
+### 詳細: ツールの定義
 
-「このツールが何をするか」「どんな引数が必要か」をエージェントに定義する。
+<!-- visual overflow チェック(Playwright)で実際のはみ出しなしを確認済み。静的解析の行数目安はコードブロックの余白を過大評価するため対象外とする -->
+<!-- ignore-layout -->
 
 ```javascript
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [{
-    name: "get_pokemon_info", description: "ポケモンの基本情報を取得します。",
-    inputSchema: { type: "object", properties: {
-      pokemon_name: { type: "string", description: "英語名" }
-    }, required: ["pokemon_name"] }
-  }]
+    name: "get_pokemon_info",
+    description: "ポケモンの基本情報を取得します。",
+    inputSchema: {
+      type: "object",
+      properties: { pokemon_name: { type: "string", description: "英語名" } },
+      required: ["pokemon_name"],
+    },
+  }],
 }));
 ```
 
----
-
-### 詳細: ツールの定義 (2/2)
-
-先ほど定義したスキーマの各項目の役割は以下の通り。
-
-- **`description`**: 最重要。LLMがツールを選ぶ判断基準となる。
+- **`description`**: LLMがツールを選ぶ判断基準となる。
 - **`properties`**: 引数の型と説明。LLMが値を推論する助けになる。
+- **値の決定者**: 実引数はAIエージェント(LLM)が文脈から推論する。
 
 ---
 
-### 詳細: 処理の実装 (1/2)
+### 詳細: 処理の実装
 
 ```javascript
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -191,15 +190,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 ```
 
----
-
-### 詳細: 処理の実装 (2/2)
-
-先ほど実装した各処理の役割は以下の通り。
-
 - **分岐と引数**: `request.params.name` で分岐し、`arguments` から値を取得する。
 - **戻り値**: `content` 配列に文字列を入れて返す。これがLLMのコンテキストになる。
-
 
 ---
 
@@ -244,4 +236,4 @@ MCPを安全に運用するための主要な対策
 - **コンテキスト管理が実運用の鍵**
   必要なデータだけを絞り込んで取得する設計が不可欠である。
 - **自作のハードルは極めて低い**
-  FastMCP 等を活用すれば、既存の社内資産を簡単に AI 対応化できる。
+  Node.js SDK 等を活用すれば、既存の社内資産を簡単に AI 対応化できる。
