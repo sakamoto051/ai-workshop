@@ -11,9 +11,9 @@
 |---|---|---|---|
 | S1 | 業務がどう変わるか + Antigravity CLI セットアップ | [s1-intro/s1-intro.md](s1-intro/s1-intro.md) | (S2 と共用) |
 | S2 | コンテキスト管理 + プロンプト設計 + 基本操作 | [s2-context/s2-context.md](s2-context/s2-context.md) | [s2-context/hands-on](s2-context/hands-on) |
-| S3 | Skills + Sub-agents | [s3-skills/s3-skills.md](s3-skills/s3-skills.md) | [s3-skills/hands-on](s3-skills/hands-on) |
+| S3 | Skills | [s3-skills/s3-skills.md](s3-skills/s3-skills.md) | [s3-skills/hands-on](s3-skills/hands-on) |
 | S4 | MCP 編 | [s4-mcp/s4-mcp.md](s4-mcp/s4-mcp.md) | [s4-mcp/hands-on](s4-mcp/hands-on) |
-| S5 | Hooks + 安全運用 + Plan モード | [s5-hooks/s5-hooks.md](s5-hooks/s5-hooks.md) | [s5-hooks/hands-on](s5-hooks/hands-on) |
+| S5 | Sub-agents | [s5-subagents/s5-subagents.md](s5-subagents/s5-subagents.md) | [s5-subagents/hands-on](s5-subagents/hands-on) |
 | S6 | 総合演習 + ROI 測定 + コスト追跡 + チーム導入 | [s6-wrapup/s6-wrapup.md](s6-wrapup/s6-wrapup.md) | [s6-wrapup/hands-on](s6-wrapup/hands-on) |
 
 ### 共通セッションテンプレ (60 分)
@@ -26,7 +26,7 @@
 | 30-55 | ハンズオン |
 | 55-60 | 3 製品比較 + まとめ |
 
-S1 はデモ重視、S5 は講義重め、S6 は演習中心、と微調整あり。
+S1 はデモ重視、S6 は演習中心、と微調整あり。
 
 
 ## 事前準備（参加者向け）

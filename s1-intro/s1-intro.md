@@ -30,7 +30,7 @@ footer: '第1回: AI Agent の全体像'
 
 1. **AI Agent とは何か** を説明できる — チャット LLM との違いを自分の言葉で
 2. **主要 3 製品** (Antigravity / Codex / Claude Code) の思想と得意領域の違いを把握する
-3. **後続セッションで扱う技術**（コンテキスト管理・Skills・MCP・Hooks）の全体像をつかむ
+3. **後続セッションで扱う技術**（コンテキスト管理・Skills・MCP・Sub-agents）の全体像をつかむ
 
 ---
 
@@ -179,7 +179,7 @@ td:first-child, th:first-child { text-align: left; white-space: nowrap; }
 
 1. **無料枠** — 参加者全員が同じ条件で触れる
 2. **準備が簡単** — Google アカウントのみ
-3. **SKILL / MCP / Hooks の概念は共通** — Antigravity で学べば他にも応用が効く
+3. **SKILL / MCP / Sub-agents の概念は共通** — Antigravity で学べば他にも応用が効く
 
 ---
 
@@ -272,9 +272,9 @@ td, th { padding: 8px 12px; }
 |---|---|---|
 | **第1回** | **AI Agent の全体像** ← 今ここ | エージェントとは何かを掴む |
 | 第2回 | コンテキスト管理 + プロンプト設計 | **AI に何を・どう伝えるか** |
-| 第3回 | Skills / カスタムコマンド / Sub-agents | **よく使う手順を再利用する** |
+| 第3回 | Skills / カスタムコマンド | **よく使う手順を再利用する** |
 | 第4回 | MCP (外部ツール・データへの接続) | **AI のできることを増やす** |
-| 第5回 | Hooks + 安全運用 + Plan モード | **AI の挙動を制御し安全に動かす** |
+| 第5回 | Sub-agents | **重い作業を別の頭脳に任せる** |
 | 第6回 | 総合演習 + ROI 測定 + チーム導入 | **学びを業務に持ち帰る** |
 
 ---
