@@ -17,7 +17,7 @@ footer: 'S5: Sub-agents 編'
 
 | 時間 | パート |
 |---|---|
-| 0-5 | イントロ + 今日の Before/After |
+| 0-5 | イントロ |
 | 5-25 | 概念解説 (仕組み / コンテキスト分離 / 並列実行) |
 | 25-35 | 講師デモ (調査系サブエージェントへの委譲) |
 | 35-55 | ハンズオン (Subagent 作成 + 並列委譲) |
@@ -36,21 +36,7 @@ footer: 'S5: Sub-agents 編'
 
 ---
 
-## 今日の Before / After
-
-### 大規模リポジトリの調査タスク
-
-| | Before (単一エージェント) | After (Subagents) |
-|---|---|---|
-| 大量ファイルの探索 | メインの会話コンテキストを消費し尽くす | 調査専用の別コンテキストに隔離 |
-| 複数観点の並行調査 | 1つずつ順番に実行 | 複数 Subagent を同時実行 |
-| 役割の切り替え | プロンプトを都度書き換える | 役割ごとに定義済み Subagent を呼ぶだけ |
-
-→ **メインの会話を汚さずに、重い調査や専門作業を任せられる**
-
----
-
-## 素朴な疑問: なぜ1つのエージェントで完結させないのか
+## なぜ1つのエージェントで完結させないのか
 
 単一のエージェントに全工程（調査・設計・実装・レビュー）を任せると:
 
@@ -58,7 +44,7 @@ footer: 'S5: Sub-agents 編'
 - **注意力の分散**: 「今は調査中なのか実装中なのか」でLLMの役割認識がぶれる
 - **逐次実行しかできない**: 独立した調査を並行して進められず、時間がかかる
 
-→ S3 で学んだ Skills が「**知識の遅延注入**」なら、Subagents は「**実行主体の分離**」
+→　Skills が「**知識の遅延注入**」なら、Subagents は「**実行主体の分離**」
 
 ---
 
@@ -72,22 +58,23 @@ footer: 'S5: Sub-agents 編'
 
 ---
 
-## コンテキスト分離という核心
+## コンテキストの分離
 
-<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; font-size: 25px;">
 <div style="width: 48%;">
 
 **親エージェントのコンテキスト**
 - ユーザとの会話
 - タスクの全体方針
-- Subagent への依頼と、その**要約結果**のみ
+- Subagentへの依頼と**要約結果**のみ
 
 </div>
 <div style="width: 48%;">
 
 **Subagent のコンテキスト**
-- 自分の役割の指示（プロンプト）
-- 探索したファイルやツールの生ログ
+- 役割の指示（システムプロンプト）
+- 具体的なタスク（委譲時の指示）
+- 探索したファイルやツールのログ
 - 親には見せない作業過程
 
 </div>
@@ -97,17 +84,49 @@ footer: 'S5: Sub-agents 編'
 
 ---
 
-## Claude Code の Subagents 定義 (1/2)
+## コンテキスト分離のトレードオフ (デメリット)
 
-`.claude/agents/researcher.md`:
+メリットの一方で、以下のトレードオフ（制限）に注意する必要があります:
 
+- **前提知識の不足**: 子は親のすべての会話履歴を参照できないため、意図の汲み取り漏れが起きやすい
+- **試行錯誤プロセスの損失**: 親には要約結果しか返らないため、失敗したアプローチの経緯などが伝わらない
+- **コスト・オーバーヘッド**: 子の起動ごとにシステムプロンプトが消費され、トークン消費や実行時間が増える
+
+→ 役割を明確に定義し、適切な背景情報を渡して依頼することが不可欠
+
+---
+
+## Antigravity (agy) の Subagents 定義 (1/3)
+
+<div style="font-size: 27px;">
+
+ワークスペースの `.agents/plugins/<plugin_name>/agents/researcher.md` に定義します。
+プラグインのマーカーとして `plugin.json` を親ディレクトリに配置します。
+
+配置後、以下のコマンドで登録・確認を行います:
+- **登録・有効化**: `agy plugin install .agents/plugins/my-plugin`
+- **パース検証**: `agy plugin validate .agents/plugins/my-plugin`
+- **インポート確認**: `agy plugin list`
+
+`.agents/plugins/my-plugin/plugin.json`:
+```json
+{ "name": "my-plugin" }
+```
+
+</div>
+
+---
+
+## Antigravity (agy) の Subagents 定義 (2/3)
+
+`.agents/plugins/my-plugin/agents/researcher.md`:
 ```markdown
 ---
 name: researcher
 description: コードベースの調査を頼まれたときに使う。
   ファイル探索やキーワード検索が主目的のときに呼び出すこと。
 tools: Read, Grep, Glob
-model: sonnet
+model: gemini-flash
 ---
 
 あなたはコードベース調査の専門家である。
@@ -116,27 +135,23 @@ model: sonnet
 
 ---
 
-## Claude Code の Subagents 定義 (2/2)
+## Antigravity (agy) の Subagents 定義 (3/3)
 
-- **`description`**: 親エージェントが「いつ呼ぶか」を判断する起動条件
-- **`tools`**: 許可するツールを制限し、誤操作の範囲を狭める
-- **`model`**: 軽い調査には安価なモデルを割り当てることも可能
+- **`description`**: 親エージェントが「いつ呼ぶか」を自動判定する起動条件
+- **`tools`**: サブエージェントに許可するツール（誤操作や事故を防ぐ境界）
+- **`model`**: 処理の重さに応じた推論モデルの指定（gemini-flash / gemini-pro など）
 
 ---
 
 ## 呼び出しのされ方
 
-Claude Code では 2 通りの起動経路がある:
+Antigravity (agy) では 2 通りの起動経路と、確認用UIが提供されています:
 
-1. **自動委譲**: `description` に合致するタスクだと親が判断すると自動的に呼ぶ
-2. **明示的な指名**: 「`researcher` サブエージェントに調べさせて」と直接指示する
+1. **自動委譲**: `description` に合致するタスクだと親が判断すると自動的に起動
+2. **明示的な指示**: プロンプトで「`researcher` を起動して」と指名
 
-```
-ユーザ: 「認証まわりのコードを一通り洗い出して」
-   └→ 親が researcher の description に合致すると判断
-      └→ researcher が別コンテキストで探索
-         └→ 要約結果だけを親に返す
-```
+- **`/agents` パネル**: CLIで `/agents` コマンドを実行し、起動中の子エージェント一覧を確認・監視可能
+- **`ctrl+j` / `ctrl+k`**: 承認待ちのタスクへ移動（`ctrl+j`）したり、その場で承認（`ctrl+k`）するショートカット
 
 ---
 
@@ -169,9 +184,9 @@ Subagents は **同時に複数呼び出せる**。
 
 ---
 
-## ハンズオン #1: 独自 Subagent の作成 (1/2) (10 分)
+## ハンズオン #1: 独自 Subagent の作成 (1/2) (8 分)
 
-`.claude/agents/reviewer.md` を新規作成する:
+`.agents/plugins/my-plugin/agents/reviewer.md` を新規作成する:
 
 ```markdown
 ---
@@ -196,22 +211,26 @@ tools: Read, Grep, Glob
 - メインの会話に `reviewer` への委譲ログが残ることを確認する
 - 指摘内容が3観点（セキュリティ / エラーハンドリング / 命名・責務分割）に沿っているか見る
 
+<!-- 詰まったグループには hands-on/answer-key/reviewer.md を案内する -->
+
 ---
 
-## ハンズオン #2: 並列委譲を体感する (15 分)
+## ハンズオン #2: 並列委譲を体感する (12 分)
 
-`hands-on/sample-repo/` に対して、2つの Subagent を用意する:
+`hands-on/sample-repo/` に対して、2つの Subagent を定義・用意する:
 
-- `frontend-researcher`（`src/frontend/` 配下のみ調査）
-- `backend-researcher`（`src/backend/` 配下のみ調査）
+- `frontend-researcher`（`sample-repo/src/frontend/` 配下を調査する description）
+- `backend-researcher`（`sample-repo/src/backend/` 配下を調査する description）
 
 > 「フロントエンドとバックエンドを同時に調査して、それぞれの責務をまとめて」
 
-と依頼し、2つが並行して起動する様子と、統合された最終レポートを確認する。
+と依頼し、2つが並行して起動する様子を `/agents` パネルや CLI ログで確認する。
+
+<!-- 詰まったグループには hands-on/answer-key/frontend-researcher.md, backend-researcher.md を案内する -->
 
 ---
 
-## ハンズオン #3 (任意): ツール制限による事故防止 (10 分)
+## ハンズオン #3 (任意・時間が余れば): ツール制限による事故防止
 
 `reviewer` の `tools` から `Edit` / `Write` を意図的に外してあることを確認する。
 
@@ -247,13 +266,17 @@ tools: Read, Grep, Glob
 
 ## 3 製品の Subagents 対比
 
-| 観点 | Antigravity | Codex CLI | Claude Code |
-|---|---|---|---|
-| 専用の Subagent 定義機構 | 発展中（要最新確認） | 未提供（外部プロセス連携が中心） | `.claude/agents/*.md` で明示的にサポート |
-| ツール権限の個別制限 | △ | - | ◯ |
-| 並列委譲 | △（要確認） | △（複数プロセス起動で代替） | ◯ |
+<div style="font-size: 24px;">
 
-→ Subagents を第一級の機能として持つのは現時点で **Claude Code** が最も明確。
+| 観点 | Antigravity (agy) | Codex CLI | Claude Code |
+|---|---|---|---|
+| 専用の Subagent 定義機構 | ◯ （`plugins/<name>/agents/*.md`） | 未提供（外部プロセス連携が中心） | ◯ （`.claude/agents/*.md`） |
+| ツール権限の個別制限 | ◯ | - | ◯ |
+| 並列委譲 | ◯ （非同期に複数起動可能） | △（複数プロセス起動で代替） | ◯ |
+
+→ **Antigravity (agy)** と **Claude Code** は、第一級の機能として Subagents 委譲をサポートしています。
+
+</div>
 
 ---
 
@@ -270,6 +293,6 @@ tools: Read, Grep, Glob
 
 ## 参考
 
+- Google Antigravity CLI Subagents ドキュメント
 - Claude Code Subagents ドキュメント
-- Antigravity CLI マルチエージェント機能（最新を要確認）
 - Codex CLI のマルチプロセス連携パターン

@@ -11,7 +11,7 @@
     "test:slides": "npm run slides:html && npm run lint:visual",
     "slides:html": "marp --html s*/*.md",
     "slides:pdf": "marp --pdf --allow-local-files s*/*.md",
-    "slides:watch": "marp --server .",
+    "slides:watch": "marp --html --server .",
     "slides:one": "marp --html"
   },
   "devDependencies": {
