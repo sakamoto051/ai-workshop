@@ -100,18 +100,14 @@ footer: 'S5: Sub-agents 編'
 
 <div style="font-size: 27px;">
 
-ワークスペースの `.agents/plugins/<plugin_name>/agents/researcher.md` に定義します。
-プラグインのマーカーとして `plugin.json` を親ディレクトリに配置します。
+ワークスペースの `.agents/agents/<エージェント名>/agent.md` に定義します。
+シンプルなエージェントは配置するだけで自動認識されます（インストールコマンドや再起動は不要です）。
 
-配置後、以下のコマンドで登録・確認を行います:
-- **登録・有効化**: `agy plugin install .agents/plugins/my-plugin`
-- **パース検証**: `agy plugin validate .agents/plugins/my-plugin`
-- **インポート確認**: `agy plugin list`
+配置場所の例:
+- `.agents/agents/researcher/agent.md`
+- `.agents/agents/orchestrator/agent.md`
 
-`.agents/plugins/my-plugin/plugin.json`:
-```json
-{ "name": "my-plugin" }
-```
+TUI上で **/agents** コマンドを実行することで、利用可能なエージェントの一覧を確認できます。
 
 </div>
 
@@ -119,7 +115,7 @@ footer: 'S5: Sub-agents 編'
 
 ## Antigravity (agy) の Subagents 定義 (2/3)
 
-`.agents/plugins/my-plugin/agents/researcher.md`:
+`.agents/agents/researcher/agent.md`:
 ```markdown
 ---
 name: researcher
@@ -186,7 +182,7 @@ Subagents は **同時に複数呼び出せる**。
 
 ## ハンズオン #1: 独自 Subagent の作成 (1/2) (8 分)
 
-`.agents/plugins/my-plugin/agents/reviewer.md` を新規作成する:
+`.agents/agents/reviewer/agent.md` を新規作成する:
 
 ```markdown
 ---
@@ -217,16 +213,30 @@ tools: Read, Grep, Glob
 
 ## ハンズオン #2: 並列委譲を体感する (12 分)
 
-`hands-on/sample-repo/` に対して、2つの Subagent を定義・用意する:
+3つの Subagent を定義・用意します。
 
-- `frontend-researcher`（`sample-repo/src/frontend/` 配下を調査する description）
-- `backend-researcher`（`sample-repo/src/backend/` 配下を調査する description）
+- `frontend_researcher/agent.md` (フロントエンド調査)
+- `backend_researcher/agent.md` (バックエンド・DB調査)
+- `orchestrator/agent.md` (オーケストレーター / tools: Subagents)
 
-> 「フロントエンドとバックエンドを同時に調査して、それぞれの責務をまとめて」
+> 認証処理とDB設計について orchestrator を起動して調査を任せて
 
-と依頼し、2つが並行して起動する様子を `/agents` パネルや CLI ログで確認する。
+メイン ➔ orchestrator ➔ 子エージェントの自動連携を確認します。
 
-<!-- 詰まったグループには hands-on/answer-key/frontend-researcher.md, backend-researcher.md を案内する -->
+---
+
+## S5ハンズオンの実装構成 (3階層の並列委譲)
+
+親が直接子を呼ぶのではなく、**親 ➔ orchestrator ➔ 子** という3階層構成です。
+
+```
+親 (プロンプトで orchestrator を起動)
+  └─→ orchestrator (子 / tools: Subagents)
+        ├─→ frontend_researcher (孫 / フロント調査)
+        └─→ backend_researcher (孫 / バックエンド調査)
+```
+
+- `orchestrator` は YAML で `tools: Subagents` を持ち、2つの子を自律的に起動します。
 
 ---
 
@@ -266,11 +276,11 @@ tools: Read, Grep, Glob
 
 ## 3 製品の Subagents 対比
 
-<div style="font-size: 24px;">
+<div style="font-size: 21px;">
 
 | 観点 | Antigravity (agy) | Codex CLI | Claude Code |
 |---|---|---|---|
-| 専用の Subagent 定義機構 | ◯ （`plugins/<name>/agents/*.md`） | 未提供（外部プロセス連携が中心） | ◯ （`.claude/agents/*.md`） |
+| 専用の Subagent 定義機構 | ◯ （`.agents/agents/`） | 未提供（外部プロセス連携が中心） | ◯ （`.claude/agents/*.md`） |
 | ツール権限の個別制限 | ◯ | - | ◯ |
 | 並列委譲 | ◯ （非同期に複数起動可能） | △（複数プロセス起動で代替） | ◯ |
 
