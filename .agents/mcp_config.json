@@ -9,7 +9,7 @@
     },
     "pokemon": {
       "command": "node",
-      "args": ["/home/t-sakamoto/study/workshop/s4-mcp/hands-on/pokemon-mcp-server/index.js"]
+      "args": ["/home/t-sakamoto/study/workshop/s4/hands-on/pokemon-mcp-server/index.js"]
     },
     "filesystem": {
       "command": "npx",
@@ -85,7 +85,7 @@
     },
     "sqlite": {
       "command": "uvx",
-      "args": ["mcp-server-sqlite", "--db-path", "/home/t-sakamoto/study/workshop/s4-mcp/hands-on/sample.db"]
+      "args": ["mcp-server-sqlite", "--db-path", "/home/t-sakamoto/study/workshop/s4/hands-on/sample.db"]
     },
     "git": {
       "command": "uvx",
