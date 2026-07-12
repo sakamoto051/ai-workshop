@@ -10,10 +10,10 @@
 | # | テーマ | スライド | ハンズオン |
 |---|---|---|---|
 | S1 | AI Agent の全体像 + Antigravity CLI セットアップ | [s1/s1.md](s1/s1.md) | (S2 と共用) |
-| S2 | コンテキスト管理 + プロンプト設計 + 基本操作 | [s2/s2.md](s2/s2.md) | [s2/hands-on](s2/hands-on) |
-| S3 | Skills | [s3/s3.md](s3/s3.md) | [s3/hands-on](s3/hands-on) |
-| S4 | MCP 編 | [s4/s4.md](s4/s4.md) | [s4/hands-on](s4/hands-on) |
-| S5 | Subagents（ワークショップ総まとめを含む） | [s5/s5.md](s5/s5.md) | [s5/hands-on](s5/hands-on) |
+| S2 | コンテキスト管理 + プロンプト設計 + 基本操作 | [s2/s2.md](s2/s2.md) | [s2/demo](s2/demo) |
+| S3 | Skills | [s3/s3.md](s3/s3.md) | [s3/demo](s3/demo) |
+| S4 | MCP 編 | [s4/s4.md](s4/s4.md) | [s4/demo](s4/demo) |
+| S5 | Subagents（ワークショップ総まとめを含む） | [s5/s5.md](s5/s5.md) | [s5/demo](s5/demo) |
 
 ### 共通セッションテンプレ (60 分)
 

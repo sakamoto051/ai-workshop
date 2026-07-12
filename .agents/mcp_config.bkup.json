@@ -9,7 +9,7 @@
     },
     "pokemon": {
       "command": "node",
-      "args": ["/home/t-sakamoto/study/workshop/s4/hands-on/pokemon-mcp-server/index.js"]
+      "args": ["/home/t-sakamoto/study/workshop/s4/demo/pokemon-mcp-server/index.js"]
     }
   },
   "reload_trigger": 1

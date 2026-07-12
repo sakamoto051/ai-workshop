@@ -2,7 +2,7 @@
 
 ## 前提
 
-- Antigravity CLI (`agy`) をこのディレクトリ（`hands-on/`）で起動して進める。
+- Antigravity CLI (`agy`) をこのディレクトリ（`demo/`）で起動して進める。
 - `.agents/agents/` 配下には `orchestrator` / `frontend_researcher` / `backend_researcher` の3つの Subagent が用意済み（`<エージェント名>/agent.md` というディレクトリ形式で配置する）。
 - 詰まったら `answer-key/` に完成形の Subagent 定義があるので参考にしてよい。
 - **シンプルなエージェント**は、`.agents/agents/<name>/agent.md` に定義ファイルを配置するだけで `agy` に自動認識されます（プラグインのようなインストール手順は不要です）。
