@@ -6,14 +6,14 @@ header: 'AI エージェント入門ワークショップ'
 footer: 'S2: コンテキスト管理 + プロンプト設計 + 基本操作'
 ---
 
-# コンテキスト管理
+# S2. コンテキスト管理
 ## 〜トークン・時間・精度を数値で最適化する〜
 
 エージェントに **前提条件と枠組みを与える** 技術
 
 ---
 
-## 本日の流れ (60 分)
+## 本日のフロー (60 分)
 
 | 時間 | パート |
 |---|---|
@@ -22,7 +22,7 @@ footer: 'S2: コンテキスト管理 + プロンプト設計 + 基本操作'
 | 20-30 | 暗黙ルールの明文化: `AGENTS.md` (手戻り削減) |
 | 30-40 | プロンプト設計の 4 原則 |
 | 40-55 | ハンズオン (Before/After 数値測定) |
-| 55-60 | まとめ + 3 製品比較 |
+| 55-60 | まとめ |
 
 ---
 
@@ -117,29 +117,20 @@ td, th { padding: 8px 12px; border-bottom: 1px solid #ccc; }
 
 ---
 
-## コンテキストウィンドウのサイズ比較 (1/2)
-<style scoped> table { font-size: 0.85em; } </style>
+## コンテキストウィンドウのサイズ
 
-| エージェント | ベースモデル | コンテキストウィンドウ |
-|---|---|---|
-| **Antigravity** (Gemini) | Gemini 3.5 Flash | **1M** |
-| | Gemini 3.1 Pro | **1M** |
-| **Codex** (OpenAI) | GPT-5.5 | **1M** |
-| | GPT-5.4 | **1M** |
-| | GPT-5.4 Mini | **400K** |
+<style scoped> table { font-size: 0.9em; } </style>
 
----
+Antigravity のベースモデル (Gemini) のコンテキストウィンドウ:
 
-## コンテキストウィンドウのサイズ比較 (2/2)
-<style scoped> table { font-size: 0.85em; } </style>
+| ベースモデル | コンテキストウィンドウ |
+|---|---|
+| Gemini 3.5 Flash | **1M** |
+| Gemini 3.1 Pro | **1M** |
 
-| エージェント | ベースモデル | コンテキストウィンドウ |
-|---|---|---|
-| **Claude Code** (Anthropic) | Opus 4.8 | **1M** |
-| | Sonnet 4.6 | **1M** |
-| | Haiku 4.5 | **200K** |
+一見巨大に見えるが、**「読み込める量」と「精度を保てる量」は別物** — だからこそコンテキスト管理が要る。
 
-> 出典: [Gemini Models](https://ai.google.dev/gemini-api/docs/models/gemini) / [OpenAI Models](https://platform.openai.com/docs/models) / [Claude Models](https://docs.anthropic.com/en/docs/about-claude/models)
+> 出典: [Gemini Models](https://ai.google.dev/gemini-api/docs/models/gemini)
 
 ---
 

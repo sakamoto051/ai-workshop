@@ -3,10 +3,10 @@ marp: true
 theme: default
 paginate: true
 header: 'AI エージェント入門ワークショップ'
-footer: '第1回: AI Agent の全体像'
+footer: 'S1: AI Agent の全体像'
 ---
 
-# 第1回. AI Agent の全体像
+# S1. AI Agent の全体像
 ## — そもそも何で、何が違うのか
 
 60 分 — 全体像をインストールしてから次回以降の各論に進む
@@ -22,7 +22,7 @@ footer: '第1回: AI Agent の全体像'
 | 25-30 | ワークショップで使う AI (Antigravity を採用) |
 | 30-40 | 講師デモ (Antigravity ライブ実演) |
 | 40-55 | ハンズオン (セットアップ + 初対話) |
-| 55-60 | ワークショップ全体地図 + Q&A |
+| 55-60 | ワークショップ全体地図 |
 
 ---
 
@@ -30,7 +30,7 @@ footer: '第1回: AI Agent の全体像'
 
 1. **AI Agent とは何か** を説明できる — チャット LLM との違いを自分の言葉で
 2. **主要 3 製品** (Antigravity / Codex / Claude Code) の思想と得意領域の違いを把握する
-3. **後続セッションで扱う技術**（コンテキスト管理・Skills・MCP・Sub-agents）の全体像をつかむ
+3. **後続セッションで扱う技術**（コンテキスト管理・Skills・MCP・Subagents）の全体像をつかむ
 
 ---
 
@@ -179,7 +179,7 @@ td:first-child, th:first-child { text-align: left; white-space: nowrap; }
 
 1. **無料枠** — 参加者全員が同じ条件で触れる
 2. **準備が簡単** — Google アカウントのみ
-3. **SKILL / MCP / Sub-agents の概念は共通** — Antigravity で学べば他にも応用が効く
+3. **SKILL / MCP / Subagents の概念は共通** — Antigravity で学べば他にも応用が効く
 
 ---
 
@@ -199,9 +199,9 @@ td, th { padding: 8px 12px; }
 
 <div class="flow">
 
-- **使う AI は Antigravity CLI** で統一 — 全員が同じ条件で「動かす」
-- 各セッションで **「Codex / Claude なら?」** を併記 → 製品にロックインしない
-- ゴールは **概念を学び、判断を養う** こと。持ち帰って自チームに合わせて選ぶ
+- **第2回以降は Antigravity CLI に絞って深掘り** — 製品比較は本セッション（第1回）のみ
+- 学ぶのは Antigravity 固有の機能ではなく、**Skills / MCP / Subagents という共通概念**
+- ゴールは **概念を学び、判断を養う** こと。持ち帰って自チームで使う製品に応用する
 
 </div>
 
@@ -274,7 +274,7 @@ td, th { padding: 8px 12px; }
 | 第2回 | コンテキスト管理 + プロンプト設計 | **AI に何を・どう伝えるか** |
 | 第3回 | Skills / カスタムコマンド | **よく使う手順を再利用する** |
 | 第4回 | MCP (外部ツール・データへの接続) | **AI のできることを増やす** |
-| 第5回 | Sub-agents | **重い作業を別の頭脳に任せる** |
+| 第5回 | Subagents | **重い作業を別の頭脳に任せる** |
 
 全5回で完結する構成（第5回で総まとめを実施）。
 
