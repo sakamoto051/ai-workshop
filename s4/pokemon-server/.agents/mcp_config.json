@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pokemon": {
+      "command": "node",
+      "args": ["/absolute/path/to/s4/pokemon-server/pokemon-mcp-server/index.js"]
+    }
+  }
+}
