@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "pokemon": {
-      "command": "node",
-      "args": ["/home/t-sakamoto/study/workshop/s4/pokemon-server/pokemon-mcp-server/index.js"]
-    }
-  }
-}

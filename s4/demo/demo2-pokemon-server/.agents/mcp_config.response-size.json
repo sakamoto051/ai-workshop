@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "pokemon-response-size": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/response-size-server.js"
+      ]
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "mcpServers": {
+    "pokemon-01": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-02": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-03": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-04": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-05": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-06": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-07": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-08": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-09": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-10": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-011": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-012": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-013": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-014": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-015": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-016": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-017": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-018": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-019": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    },
+    "pokemon-020": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s4/demo/demo2-pokemon-server/pokemon-mcp-server/index.js"
+      ]
+    }
+  }
+}
