@@ -14,8 +14,11 @@
 ```markdown
 ---
 name: reviewer
-description: コード変更のレビューを頼まれたときに使う。
-tools: Read, Grep, Glob
+description: コードのレビュー・チェックを頼まれたときに使う。
+tools:
+  - view_file
+  - grep_search
+  - find_by_name
 ---
 
 あなたはシニアエンジニアとしてコードレビューを行う。
@@ -26,6 +29,8 @@ tools: Read, Grep, Glob
 ```
 
 ※ 保存するだけで自動的に有効化されます。インストールコマンドは不要です。
+※ `tools` は必ずYAML配列（`- view_file` のような箇条書き）で書く。カンマ区切りの1行（`tools: view_file, grep_search, find_by_name`）にすると不正なツール名として扱われ、`/agents` 一覧から消えるので注意。
+※ ツール名は `/agents` パネルなどの画面表示名（Read等）ではなく、`view_file` のような内部名（snake_case）を使う。
 
 2. プロンプトを固定した実行スクリプトを走らせる:
 
@@ -33,7 +38,7 @@ tools: Read, Grep, Glob
 ./run_reviewer.sh
 ```
 
-中身は `agy -i "sample-repo/src/backend/ をレビューして"`。`reviewer` を名指ししていないため、選ばれるかどうかは `description` だけが判断材料になる。
+中身は `agy -i "reviewer エージェントを使って、sample-repo/src/backend/ をレビューして"`。`reviewer` を名指ししている。自動委譲（`description` だけで選ばれる）は公式仕様上も発動を保証されないため、確実性を優先して名指しにしている。
 
 → `reviewer` が呼ばれ、`tools` に書き込み系がないため指摘のみで済むことを確認する。
 指摘が3観点に沿っているか、答え合わせは `answer-key/reviewer/agent.md` を参照。
@@ -45,7 +50,7 @@ tools: Read, Grep, Glob
 1. まず講師が以下を実行し、動作を解説する:
 
 ```bash
-./run_prompt.sh
+./run_orchestrator.sh
 ```
 
 - `/agents` パネルで `frontend_researcher` と `backend_researcher` が**並行**に起動する様子を確認する
@@ -54,7 +59,7 @@ tools: Read, Grep, Glob
 2. 続けて**全員が自分のターミナルで**同じコマンドを実行する:
 
 ```bash
-./run_prompt.sh
+./run_orchestrator.sh
 ```
 
 - 親 ➔ `orchestrator` ➔ `frontend_researcher` / `backend_researcher` という3階層の自動連携を自分の目で確認する。
@@ -65,7 +70,7 @@ tools: Read, Grep, Glob
 
 > reviewer にレビューだけでなく、直接コードも直させて
 
-- と依頼し、`tools` に `Edit` / `Write` がない `reviewer` は書き込めないことを確認する。
+- と依頼し、`tools` に書き込み系（`write_to_file` 等）がない `reviewer` は書き込めないことを確認する。
 
 ## 比較演習
 

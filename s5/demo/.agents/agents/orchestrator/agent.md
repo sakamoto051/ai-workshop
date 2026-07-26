@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: 複雑な調査タスクを分割し、下位エージェント（frontend_researcher, backend_researcher）を起動して並行調査を制御し、結果を統合するエージェント。
-tools: Agent
+tools: [invoke_subagent]
 ---
 
 あなたは複数の専門エージェントを束ねてタスクを解決するオーケストレーターエージェントです。
