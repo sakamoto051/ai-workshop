@@ -27,9 +27,13 @@ tools: Read, Grep, Glob
 
 ※ 保存するだけで自動的に有効化されます。インストールコマンドは不要です。
 
-2. `agy` を起動して次を依頼する:
+2. プロンプトを固定した実行スクリプトを走らせる:
 
-> sample-repo/src/backend/ をレビューして
+```bash
+./run_reviewer.sh
+```
+
+中身は `agy -i "sample-repo/src/backend/ をレビューして"`。`reviewer` を名指ししていないため、選ばれるかどうかは `description` だけが判断材料になる。
 
 → `reviewer` が呼ばれ、`tools` に書き込み系がないため指摘のみで済むことを確認する。
 指摘が3観点に沿っているか、答え合わせは `answer-key/reviewer/agent.md` を参照。
