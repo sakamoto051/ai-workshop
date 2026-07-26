@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "weather": {
+      "command": "node",
+      "args": [
+        "/home/t-sakamoto/study/workshop/s3/demo/demo2-weather-server/weather-mcp-server/index.js"
+      ]
+    }
+  }
+}
