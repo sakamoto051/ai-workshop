@@ -6,11 +6,17 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 // ==========================================
-// 戻り値サイズの実測用サーバー
-// 同じデータソース（Open-Meteo）に対して、
-// 「取得可能な変数を全部盛りで返す」ツールと「絞り込んで返す」ツールの
-// 2つを用意する。同一の会話で両方を呼び出すのではなく、
-// 新規会話ごとに片方だけを呼び出し、直後の Context Usage を比較する。
+// 戻り値サイズの比較実験用サーバー
+//
+// 2つのツールは **まったく同じAPIリクエスト** を発行する。
+// 違うのは「取得したデータをどう返すか」だけ:
+//   - get_weather_raw      : 取得した JSON をそのまま全部返す
+//   - get_weather_filtered : 同じ JSON から現在の気温・風速だけ抽出して返す
+// こうすることで、コンテキストに効くのが「整形の有無」だけであることを
+// 変数を1つに絞って観測できる。
+//
+// 同一の会話で両方を呼び出すのではなく、新規会話ごとに片方だけを呼び出し、
+// 直後の Context Usage を比較する。
 // ==========================================
 
 const server = new Server(
@@ -49,12 +55,23 @@ async function geocode(location) {
   return data.results[0];
 }
 
+// 両ツールが共有する唯一のAPIリクエスト。取得内容はツールによらず常に同じ。
+async function fetchWeather(place) {
+  const res = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}` +
+    `&hourly=${RAW_HOURLY_VARS}&daily=${RAW_DAILY_VARS}&forecast_days=16&past_days=14` +
+    `&current_weather=true&timezone=${encodeURIComponent(place.timezone)}`
+  );
+  if (!res.ok) throw new Error("天気情報の取得に失敗しました。");
+  return res.json();
+}
+
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
       {
         name: "get_weather_raw",
-        description: "指定地点の気象データを、取得可能な変数を全て含めて返します（16日分・時間別/日別）。",
+        description: "指定地点の気象データを取得し、取得したJSONをそのまま全て返します（整形なし）。",
         inputSchema: {
           type: "object",
           properties: {
@@ -65,7 +82,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "get_weather_filtered",
-        description: "指定地点の現在の天気（天気・気温・風速）のみを絞り込んで返します。",
+        description: "指定地点の気象データを同じ条件で取得し、現在の気温・風速だけを抽出して返します（整形あり）。",
         inputSchema: {
           type: "object",
           properties: {
@@ -83,22 +100,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     const place = await geocode(location);
 
+    // ここまでは両ツール共通。取得するデータは完全に同じ。
+    const data = await fetchWeather(place);
+
+    // 違いはここから先の「返し方」だけ。
     if (request.params.name === "get_weather_raw") {
-      const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}` +
-        `&hourly=${RAW_HOURLY_VARS}&daily=${RAW_DAILY_VARS}&forecast_days=16&timezone=${encodeURIComponent(place.timezone)}`
-      );
-      if (!res.ok) throw new Error("天気情報の取得に失敗しました。");
-      const data = await res.json();
       return { content: [{ type: "text", text: JSON.stringify(data) }] };
     }
 
     if (request.params.name === "get_weather_filtered") {
-      const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current_weather=true&timezone=${encodeURIComponent(place.timezone)}`
-      );
-      if (!res.ok) throw new Error("天気情報の取得に失敗しました。");
-      const data = await res.json();
       const cw = data.current_weather;
       const text = `地点: ${place.name}\n気温: ${cw.temperature}°C\n風速: ${cw.windspeed}km/h`;
       return { content: [{ type: "text", text }] };
