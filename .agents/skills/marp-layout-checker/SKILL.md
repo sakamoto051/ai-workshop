@@ -98,7 +98,7 @@ npx @marp-team/marp-cli --server slides &
 ```
 ## Marp レイアウトチェック結果
 
-**対象ファイル**: s1/s1.md
+**対象ファイル**: 1/1.md
 **チェック日時**: YYYY-MM-DD HH:MM
 
 ### ✅ 問題なし

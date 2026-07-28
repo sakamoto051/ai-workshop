@@ -5,7 +5,7 @@ const glob = require('glob'); // ensure glob is available or use a simple fs.rea
 
 (async () => {
   // Find all built HTML slides
-  const htmlFiles = glob.sync('s*/*.html');
+  const htmlFiles = glob.sync('[0-9]*/*.html');
   
   if (htmlFiles.length === 0) {
     console.log('No HTML files found. Please run npm run slides:html first.');

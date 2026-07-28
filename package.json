@@ -9,8 +9,8 @@
     "lint:visual": "node .agents/scripts/check_visual_overflow.js",
     "preslides:html": "npm run lint:layout && npm run lint:flow",
     "test:slides": "npm run slides:html && npm run lint:visual",
-    "slides:html": "marp --html s*/*.md",
-    "slides:pdf": "marp --pdf --allow-local-files s*/*.md",
+    "slides:html": "marp --html [0-9]*/*.md",
+    "slides:pdf": "marp --pdf --allow-local-files [0-9]*/*.md",
     "slides:watch": "marp --html --server .",
     "slides:one": "marp --html"
   },

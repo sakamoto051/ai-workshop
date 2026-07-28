@@ -5,7 +5,7 @@ import glob
 def check_flow():
     error_count = 0
 
-    for filepath in glob.glob("s*/*.md"):
+    for filepath in glob.glob("[0-9]*/*.md"):
         with open(filepath) as f:
             content = f.read()
 
