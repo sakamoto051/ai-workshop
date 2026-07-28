@@ -2,7 +2,7 @@
   "mcpServers": {
     "weather-response-size": {
       "command": "node",
-      "args": ["/home/t-sakamoto/study/workshop/3/demo/demo2-weather-server/weather-mcp-server/response-size-server.js"]
+      "args": ["/home/t-sakamoto/study/ai-workshop/3/demo/demo2-weather-server/weather-mcp-server/response-size-server.js"]
     }
   }
 }
