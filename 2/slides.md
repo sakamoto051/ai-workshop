@@ -1,0 +1,289 @@
+---
+marp: true
+theme: workshop
+paginate: true
+header: 'AI エージェント入門ワークショップ'
+footer: '第2回: Skills 編'
+---
+
+<!-- _class: hero -->
+
+# 第2回. Skills 編
+## コンテキストを動的に注入する
+
+---
+
+## ワークショップ全体のロードマップ
+
+<style scoped>
+table { font-size: 22px; }
+td, th { padding: 8px 12px; }
+</style>
+
+| # | テーマ | 概要 |
+|---|---|---|
+| 第1回 | AI Agent の全体像 + コンテキスト管理 | エージェントの基本とコンテキスト管理を掴む |
+| **第2回** | **Skills** | よく使う手順を再利用する |
+| 第3回 | MCP | AI のできることを増やす |
+| 第4回 | Subagents | 重い作業を別の頭脳に任せる |
+
+---
+
+## 本日のフロー
+
+<!-- visual overflow チェック(Playwright)で確認する。番号付きリストをフロー図解に置き換えている -->
+<!-- ignore-layout -->
+
+<div class="flow grid-3">
+<div class="flow-step"><span class="flow-num">1</span><span class="flow-label">このセッションのゴール</span></div>
+<div class="flow-step"><span class="flow-num">2</span><span class="flow-label">素のエージェントの限界 / 巨大なルールブックの失敗</span></div>
+<div class="flow-step"><span class="flow-num">3</span><span class="flow-label">Skills によるアプローチ</span></div>
+<div class="flow-step"><span class="flow-num">4</span><span class="flow-label">実践ユースケース</span></div>
+<div class="flow-step"><span class="flow-num">5</span><span class="flow-label">ハンズオン（Skill の作成 + Agentic Workflow）</span></div>
+<div class="flow-step"><span class="flow-num">6</span><span class="flow-label">まとめ</span></div>
+</div>
+
+---
+
+## このセッションのゴール
+
+- スキルのアーキテクチャの仕組みを知る
+- スキルの使用によるコンテキストへの影響を理解する
+- スキルを作成できるようになる
+
+---
+
+## 素のエージェントの限界
+
+**AIへの指示: 「ログイン機能を実装して」**
+動作はするが、プロダクション水準に満たないコードが出力される
+
+<!-- visual overflow チェック(Playwright)で確認する。箇条書きをカード形式の図解に置き換えている -->
+<!-- ignore-layout -->
+
+<div class="cards" style="--cols:3;">
+<div class="card c-danger"><span class="card-title">セキュリティの甘さ</span><span class="card-desc">パスワードの平文保存など</span></div>
+<div class="card c-danger"><span class="card-title">異常系の軽視</span><span class="card-desc">エラーハンドリングがログ出力のみで、異常系の考慮が抜けている</span></div>
+<div class="card c-danger"><span class="card-title">無秩序なコード</span><span class="card-desc">チームのコーディング規約やデザインルールに則ってない書き方</span></div>
+</div>
+
+プロンプトで毎回これらのルールに従えと書くのは非現実的
+
+---
+
+## 巨大なルールブックの失敗
+
+あらゆるルールをAGENTS.mdのような単一ファイルに全て詰め込むと...
+
+<!-- visual overflow チェック(Playwright)で確認する。箇条書きをカード形式の図解に置き換えている -->
+<!-- ignore-layout -->
+
+<div class="cards" style="--cols:3;">
+<div class="card c-danger"><span class="card-title">コンテキストウィンドウの逼迫</span><span class="card-desc">ルールを読むだけで上限に達し、肝心のコードを読めなくなる</span></div>
+<div class="card c-danger"><span class="card-title">Lost in the Middle</span><span class="card-desc">文章が長すぎると、中間にある重要なルールが抜け落ちやすくなる</span></div>
+<div class="card c-danger"><span class="card-title">コンテキストの汚染</span><span class="card-desc">UI作成中にバックエンドのルールが混ざるなど、ノイズによるハルシネーション</span></div>
+</div>
+
+---
+
+## Skillsによるアプローチ
+<style scoped>
+li, p { font-size: 0.9em; }
+</style>
+
+プロンプトの羅列ではなく、専門領域のルールや知識を独立したモジュールとして管理し、
+必要な状況に合致したモジュールのみを、コンテキストへ動的に注入する（遅延読み込み）
+
+**コンテキストの最適化（Dynamic Context Injection）による効果**
+タスクに特化した知識モジュールのみを動的注入することで、以下の効果をもたらす。
+
+<!-- visual overflow チェック(Playwright)で確認する。箇条書きをカード形式の図解に置き換えている -->
+<!-- ignore-layout -->
+
+<div class="cards" style="--cols:3;">
+<div class="card c-accent"><span class="card-title">コンテキストの節約</span><span class="card-desc">上限逼迫を防ぎ、ソースコード等の解析に必要な余力を確保</span></div>
+<div class="card c-accent"><span class="card-title">ノイズの排除</span><span class="card-desc">不要な領域のルールを遮断し、ハルシネーションを防止</span></div>
+<div class="card c-accent"><span class="card-title">精度の向上</span><span class="card-desc">AIの注意力を特定ドメインに集中させ、実務に耐えうるコードを出力</span></div>
+</div>
+
+---
+
+## Skillsの構造
+
+単一のテキストファイルではなく、スクリプトや参照データを束ねたパッケージとして構成される。
+
+```text
+.agents/skills/<スキル名>/
+ ├── SKILL.md    [必須] コアとなる指示書（トリガー条件 ＋ 最小限のコア・ルール）
+ ├── scripts/    [任意] Linter実行などの自作ヘルパースクリプト群
+ ├── examples/   [任意] 実装例や使用パターンのサンプルコード
+ └── references/ [任意] 巨大なAPI仕様書などの静的リソース
+```
+
+---
+
+## 各ファイル/ディレクトリの役割
+
+<!-- visual overflow チェック(Playwright)で確認する。3ブロックをカード形式の図解に置き換えている -->
+<!-- ignore-layout -->
+
+<div class="cards" style="--cols:3;">
+<div class="card"><span class="card-title"><code>SKILL.md</code>（コア指示書）<br>【必須】</span><span class="card-desc"><strong>役割:</strong> スキルの起点。トリガー条件（YAML）とルール（Markdown）を定義<br><strong>設計:</strong> コアな指示のみに留め、注意力を特定タスクに集中させる</span></div>
+<div class="card c-accent"><span class="card-title"><code>scripts/</code>（動的拡張）<br>【任意】</span><span class="card-desc"><strong>役割:</strong> AI自身が実行可能なヘルパースクリプト群（Lint実行、テスト起動など）<br><strong>設計:</strong> 標準ツールで不足する操作をAIに付与する</span></div>
+<div class="card c-warm"><span class="card-title"><code>examples/</code> & <code>references/</code>（静的拡張）【任意】</span><span class="card-desc"><strong>役割:</strong> 実装サンプル、巨大なAPI仕様書など<br><strong>設計:</strong> 常時読み込ませず、必要な時にオンデマンド参照する</span></div>
+</div>
+
+---
+
+## SKILL.md と遅延読み込み（Lazy Loading）
+
+```yaml
+---
+name: review
+description: レビューを求められた際に呼び出すこと
+---
+
+# ルール
+- N+1問題などのパフォーマンス低下を防ぐ
+- 正常系だけでなく異常系を網羅する
+```
+
+**遅延読込**: `AI Agentへの指示` ➔ `description判定` ➔ `ルール読込`
+
+---
+
+## 拡張ディレクトリの実装例（動的拡張）
+
+**`scripts/get-db-schema.sh`**
+```bash
+#!/bin/bash
+# AIがSQLやORMのコードを生成する際、古いマイグレーションファイルを見て
+# 存在しないカラムを幻覚（ハルシネーション）するのを防ぐためのスクリプト。
+# 実際のDBから最新のスキーマ（DDL）を動的に抽出してコンテキストに渡す。
+echo "現在のデータベースの最新スキーマ定義は以下の通りです:"
+sqlite3 ./dev.db ".schema" | grep -v "sqlite_sequence"
+```
+
+---
+
+## 拡張ディレクトリの実装例（静的拡張）
+
+**`references/BACKEND_GUIDELINES.md`**
+```markdown
+## バックエンド実装ガイドライン
+
+## 1. セキュリティ（最優先事項）
+- `SELECT *` の使用禁止（個人情報の意図しない露出を防止）
+- パスワードやトークン等の機密情報はログに出力しないこと
+
+## 2. パフォーマンスと可用性
+- N+1問題の防止: ORMで関連データを引く際は Eager Loading を強制
+- リソース保護: 一覧取得APIには必ずページネーションを実装すること
+```
+
+---
+
+## ユースケース①: 技術領域の特化
+プロジェクトの「どの部分を作るか」を分担させる。
+
+<!-- visual overflow チェック(Playwright)で確認する。箇条書きをカード形式の図解に置き換えている -->
+<!-- ignore-layout -->
+
+<div class="cards" style="--cols:3;">
+<div class="card"><span class="card-title"><code>frontend</code> / <code>backend</code></span><span class="card-desc">UIコンポーネントの分割ルールや、APIレスポンスの統一フォーマットの強制</span></div>
+<div class="card c-accent"><span class="card-title"><code>architecture</code></span><span class="card-desc">個別の機能実装ではなく、ディレクトリ構成や技術スタックの選定など全体設計に特化</span></div>
+<div class="card c-warm"><span class="card-title"><code>infra</code></span><span class="card-desc">DockerやCI/CDパイプラインなど、インフラ環境の構築ルールに特化</span></div>
+</div>
+
+---
+
+## ユースケース②: 開発プロセスの特化
+コードを書く以外のエンジニアリング工程を分担させる。
+
+<!-- visual overflow チェック(Playwright)で確認する。箇条書きをカード形式の図解に置き換えている -->
+<!-- ignore-layout -->
+
+<div class="cards" style="--cols:4;">
+<div class="card"><span class="card-title"><code>conductor</code></span><span class="card-desc">タスク分解と他のAIへの指示出しを行うマネージャー役</span></div>
+<div class="card c-accent"><span class="card-title"><code>reviewer</code></span><span class="card-desc">社内規約の準拠チェックやパフォーマンス問題の監査に特化</span></div>
+<div class="card c-warm"><span class="card-title"><code>tester</code></span><span class="card-desc">エッジケースを網羅した品質保証テストの生成に特化</span></div>
+<div class="card c-danger"><span class="card-title"><code>document-writer</code></span><span class="card-desc">ソースコードからAPIリファレンスを自動生成</span></div>
+</div>
+
+---
+
+## ハンズオン (1/2)
+<style scoped>
+li, p { font-size: 0.9em; }
+</style>
+
+**【Step 1】スキルなしで通しデモ**
+- 実行ディレクトリ: `2/demo/without-skill`
+- 実行コマンド: `./run-implement.sh` → `./run-review.sh`
+- 依頼: 商品レビュー機能を作って → 生成コード一式をレビューして
+- 結果: 属人的でバラバラな実装 ＋ 一般的な指摘に留まるレビュー
+
+**【Step 2】スキルありで同じ依頼を実行**
+- 実行ディレクトリ: `2/demo/with-skill`
+- 実行コマンド: `./run-implement.sh` → `./run-review.sh`（依頼文はStep 1と全く同一）
+- **`architect`**: きれいに分離された4層レイヤードアーキテクチャ
+- **`reviewer`**: Linter実行と社内規約に基づく専門レビュー
+
+---
+
+## ハンズオン (2/2)
+
+**【Step 3】Agentic Workflow（スキルの統合）**
+- 実行ディレクトリ: `2/demo/with-skill`
+- 実行コマンド: `./run-flow.sh`
+- 要件: 設計から実装・レビュー・修正までの自動化
+- **`orchestrator`**: `architect`と`reviewer`のスキルを組み合わせ、自律的に連携させて一気通貫のフローを実行する。
+
+---
+
+## チーム開発へのスケール（属人化の排除）
+
+**プロンプトからコードとしての知識（Knowledge as Code）へ**
+
+- **`.agents/` ディレクトリのGit管理（属人化からの脱却）**
+  - プロジェクト直下のスキル定義をコミットし、コードと共にバージョン管理する
+  - 属人的な運用を終わらせ、ドメイン知識をチームの共有資産とする
+- **AIの振る舞いをチーム全体で共有**
+  - レビュー観点など暗黙知をSkill化することで、ジュニアエンジニアでも同等の品質を引き出せる
+
+---
+
+## まとめ
+<style scoped>
+li, p { font-size: 0.9em; }
+</style>
+
+- 汎用プロンプトから、制約事項の動的注入へ
+  - 巨大なルールブックを廃止し、必要な知識だけを遅延ロード（Lazy Loading）する
+- 属人的なハックから、Knowledge as Codeへ
+  - AIへの指示をGit管理し、暗黙知をチーム全体の共有資産にする
+- 単一のチャットボットから、Agentic Workflowへ
+  - 役割を細分化（`architect`, `reviewer` 等）し、AI自身が自律的に連携するフローを構築する
+
+**生成AIをツールとして使う時代から、チームの一員として自律的に働かせる時代へ。**
+
+---
+
+## ワークショップの全体像と次回予告
+
+<style scoped>
+table { font-size: 20px; }
+td, th { padding: 8px 12px; }
+li { font-size: 19px; }
+</style>
+
+| # | テーマ | 概要 | 状態 |
+|---|---|---|:---:|
+| 第1回 | AI Agent の全体像 + コンテキスト管理 | エージェントの基本とコンテキスト管理を掴む | 済 |
+| **第2回** | **Skills** | **よく使う手順を再利用する** | **完了** |
+| 第3回 | MCP | AI のできることを増やす | 次回 |
+| 第4回 | Subagents | 重い作業を別の頭脳に任せる | |
+
+- **次回予告: 第3回 MCP 編**
+  - AIができること（外部ツール・データ接続）を増やすための Model Context Protocol を学ぶ。
+  - エージェントの機能拡張プロセスについて実践する。

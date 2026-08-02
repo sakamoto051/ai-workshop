@@ -1,0 +1,394 @@
+/* @theme workshop */
+@import 'default';
+
+/**
+ * AI エージェント入門ワークショップ 共通テーマ
+ * 第1〜4回のスライドで一貫した配色・タイポグラフィを適用する。
+ */
+
+section {
+  --w-primary: #4F46E5;
+  --w-primary-dark: #362FA0;
+  --w-primary-light: #EEEDFC;
+  --w-accent: #0EA5A4;
+  --w-ink: #21232E;
+  --w-muted: #666B7A;
+  --w-border: #E3E1F5;
+  --w-surface: #F7F7FC;
+  --w-code-bg: #211D3A;
+  --w-code-ink: #E9E6FA;
+
+  /* コンテキスト図解などで使う共通カテゴリカラー */
+  --cat-neutral: #878DA6;
+  --cat-warm: #EC9A29;
+  --cat-primary: #4F46E5;
+  --cat-danger: #E4574F;
+
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic Medium",
+    "Yu Gothic", "Noto Sans JP", "Segoe UI", Roboto, sans-serif;
+  color: var(--w-ink);
+  background: #ffffff;
+  padding: 52px 74px;
+}
+
+/* 見出し用の高さをあらかじめ確保しておく。default テーマの
+   place-content: safe center center はそのまま活かし、見出し以外の本文は
+   残りの領域内で中央寄せにする（hero スライドは対象外） */
+section:not(.hero) {
+  padding-top: 168px;
+}
+
+/* ---------- 見出し ---------- */
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--w-primary-dark);
+}
+
+h1 {
+  font-size: 1.7em;
+  margin: 0 0 0.4em;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin: 0 0 0.6em;
+  padding-bottom: 0.28em;
+  border-bottom: 4px solid var(--w-primary);
+}
+
+/* スライド本文中の最初の見出しは、内容量に関わらず常に同じ位置に固定する */
+section:not(.hero) > h1:first-of-type,
+section:not(.hero) > h2:first-of-type {
+  position: absolute;
+  top: 66px;
+  left: 74px;
+  right: 74px;
+  margin: 0;
+}
+
+h3 {
+  font-size: 1.12em;
+  color: var(--w-accent);
+}
+
+/* ---------- 本文 ---------- */
+
+p, li {
+  line-height: 1.55;
+}
+
+strong {
+  color: var(--w-primary-dark);
+  font-weight: 700;
+}
+
+a {
+  color: var(--w-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+ul > li::marker, ol > li::marker {
+  color: var(--w-primary);
+  font-weight: 700;
+}
+
+blockquote {
+  margin: 0.6em 0;
+  padding: 0.55em 1em;
+  background: var(--w-surface);
+  border-left: 6px solid var(--w-accent);
+  border-radius: 0 8px 8px 0;
+  color: var(--w-ink);
+  font-style: normal;
+}
+
+blockquote > p {
+  margin: 0;
+}
+
+/* ---------- テーブル ---------- */
+
+table {
+  border-collapse: collapse;
+  border: 1px solid var(--w-border);
+}
+
+th {
+  background: var(--w-primary);
+  color: #ffffff;
+  font-weight: 700;
+  border: 1px solid var(--w-primary);
+}
+
+td {
+  border: 1px solid var(--w-border);
+}
+
+tr:nth-child(even) td {
+  background: var(--w-surface);
+}
+
+/* ---------- コード ---------- */
+
+pre {
+  background: var(--w-code-bg);
+  border-radius: 10px;
+  padding: 16px 20px;
+  border: none;
+}
+
+pre code {
+  background: transparent;
+  color: var(--w-code-ink);
+  text-shadow: none;
+}
+
+code:not(pre code) {
+  background: var(--w-primary-light);
+  color: var(--w-primary-dark);
+  border-radius: 4px;
+  padding: 0.12em 0.4em;
+  font-weight: 600;
+}
+
+/* highlight.js トークンカラー（テーマに合わせたダーク配色） */
+pre code .hljs-comment,
+pre code .hljs-quote {
+  color: #8b8fb0;
+  font-style: italic;
+}
+pre code .hljs-keyword,
+pre code .hljs-selector-tag,
+pre code .hljs-literal,
+pre code .hljs-meta .hljs-keyword,
+pre code .hljs-doctag {
+  color: #7DD3FC;
+}
+pre code .hljs-string,
+pre code .hljs-attr,
+pre code .hljs-regexp,
+pre code .hljs-addition {
+  color: #A5D6A7;
+}
+pre code .hljs-number,
+pre code .hljs-literal,
+pre code .hljs-built_in,
+pre code .hljs-type {
+  color: #F5B94B;
+}
+pre code .hljs-title,
+pre code .hljs-title.function_,
+pre code .hljs-section {
+  color: #C4B5FD;
+}
+pre code .hljs-variable,
+pre code .hljs-template-variable,
+pre code .hljs-params {
+  color: #E9E6FA;
+}
+pre code .hljs-tag,
+pre code .hljs-name {
+  color: #7DD3FC;
+}
+
+/* ---------- ヘッダー / フッター / ページ番号 ---------- */
+
+section header {
+  color: var(--w-primary-dark);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--w-border);
+}
+
+section footer {
+  color: var(--w-muted);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+section::after {
+  color: var(--w-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ---------- 図解パーツ: カードグリッド ---------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), 1fr);
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.card {
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  border-top: 5px solid var(--w-primary);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.card.c-accent { border-top-color: var(--w-accent); }
+.card.c-warm   { border-top-color: var(--cat-warm); }
+.card.c-danger { border-top-color: var(--cat-danger); }
+.card.c-neutral{ border-top-color: var(--cat-neutral); }
+
+.card .card-title {
+  display: block;
+  font-weight: 700;
+  color: var(--w-primary-dark);
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.card .card-desc {
+  display: block;
+  color: var(--w-ink);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+/* ---------- 図解パーツ: フロー（工程） ---------- */
+
+.flow {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.flow-step {
+  flex: 1 1 0;
+  min-width: 130px;
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: center;
+}
+
+.flow-step .flow-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--w-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.flow-step .flow-label {
+  display: block;
+  font-weight: 700;
+  color: var(--w-primary-dark);
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+
+.flow.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.flow.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.flow.grid-2 .flow-step {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.flow.grid-2 .flow-step .flow-num {
+  margin-bottom: 0;
+  flex: 0 0 auto;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--w-primary);
+  font-size: 20px;
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
+/* ---------- 図解パーツ: バッジ / ピル ---------- */
+
+.pill {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--w-primary-light);
+  color: var(--w-primary-dark);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ---------- タイトル / セクション区切りスライド ---------- */
+
+section.hero {
+  background: linear-gradient(135deg, #191340 0%, #2B2178 48%, #4438D6 100%);
+  color: #F5F4FF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+section.hero h1 {
+  color: #FFFFFF;
+  font-size: 2em;
+  border: none;
+  margin-bottom: 0.3em;
+}
+
+section.hero h1::before {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--w-accent);
+  margin-bottom: 0.5em;
+}
+
+section.hero h2 {
+  color: #C9C3F7;
+  font-weight: 500;
+  font-size: 1.15em;
+  border: none;
+  margin: 0;
+}
+
+section.hero p {
+  color: #C9C3F7;
+}
+
+section.hero strong {
+  color: #ffffff;
+}
+
+section.hero header,
+section.hero footer {
+  color: rgba(245, 244, 255, 0.65);
+  border-color: rgba(245, 244, 255, 0.2);
+}
+
+section.hero::after {
+  color: rgba(245, 244, 255, 0.65);
+}
