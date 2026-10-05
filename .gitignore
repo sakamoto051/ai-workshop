@@ -4,3 +4,14 @@ dist/
 *.log
 .env.local
 .playwright-mcp/
+# Local configuration; only safe templates belong in Git
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Local data created during exercises
+*.db
+!3/demo/sample.db
+*.sqlite
+*.sqlite3
